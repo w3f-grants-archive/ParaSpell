@@ -56,7 +56,8 @@
       async openChannels() {
         if(this.key == 0 || this.keyy == 0 || this.key == this.keyy) 
         {
-          this.$notify('You have to select different parachains first!')
+          this.$notify({ title: 'Error', text: 'You need to select different parachains.', type: 'error', duration: 3000,speed: 100})
+
         }
         else 
         {
@@ -70,13 +71,13 @@
           //Open HRMP channels
           const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.key,this.keyy,8,1000);
           const hrmp1 = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-          this.$notify('Opening channel 1 channel 2 will open in 6 seconds.')
-          await new Promise(resolve => setTimeout(resolve, 6000));
+          this.$notify({ title: 'Opening channel 1', text: 'Channel 2 will open in 10 seconds.', duration: 10000,speed: 100})
+          await new Promise(resolve => setTimeout(resolve, 10000));
           const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.keyy,this.key,8,1000);
           const hrmp2 = await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-          this.$notify('Opening channel 2.')
-          await new Promise(resolve => setTimeout(resolve, 6000));
-          this.$notify('Channels should be open now.')
+          this.$notify({ title: 'Opening channel 2', text: 'This will take 10 seconds', duration: 10000,speed: 100})
+          await new Promise(resolve => setTimeout(resolve, 10000));
+          this.$notify({ title: 'Success', text: 'Channels should be open within minute from now.', type: 'success', duration: 10000,speed: 100})
         }
       }
     }
