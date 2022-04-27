@@ -2,6 +2,7 @@
 install:
 	rustup default nightly
 	rustup target add wasm32-unknown-unknown
+	git clone https://github.com/paritytech/polkadot.git
 	cd ./polkadot/ && git checkout release-v0.9.19 && cargo build --release
 	git clone https://github.com/galacticcouncil/Basilisk-node.git
 	cd ./Basilisk-node/ && make build
