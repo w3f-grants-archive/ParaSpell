@@ -7,6 +7,14 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
+    name: 'loadingScreen',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/LoadingScreen.vue')
+  },
+  {
+    path: '/home',
     name: 'home',
     component: HomeView
   },
@@ -27,7 +35,7 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/OpenChannel.vue')
   },
   {
-    path: '/home',
+    path: '/menu',
     name: 'menuScreen',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route

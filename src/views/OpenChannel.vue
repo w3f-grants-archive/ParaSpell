@@ -11,7 +11,7 @@
     </b-select>
     </b-field>
     <b-button class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
-    <b-button class="buttonn"  tag="router-link" to="/home" type="is-link">Back to main menu</b-button>
+    <b-button class="buttonn"  tag="router-link" to="/menu" type="is-link">Back to main menu</b-button>
   </div>
 </template>
 <script lang="ts">

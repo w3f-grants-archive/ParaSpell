@@ -1,8 +1,9 @@
 <template>
   <div>
-    <b-button class="buttonn" tag="router-link" to="/home" type="is-link">Login as Alice</b-button>
+    <b-button class="buttonn" tag="router-link" to="/menu" type="is-link">Login as Alice</b-button>
   </div>
 </template>
+
 <style scoped>
 .buttonn {
   margin-top: 20px;
