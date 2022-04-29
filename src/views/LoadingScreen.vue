@@ -31,13 +31,13 @@ export default defineComponent({
       const call2 = api2.tx.assetRegistry.registerForeignAsset({V1: {parents:1,interior: "Here"}},{name: "UNIT", symbol: "UNIT", decimals: 12, minimalbalance: 0});
       const result2 = await api2.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
       
-      this.$notify({ title: 'Loading', text: 'Application is loading. Please wait', duration: 12000,speed: 100})
-      await new Promise(resolve => setTimeout(resolve, 20000));
+      this.$notify({ title: 'Loading', text: 'Application is loading and setting up for first time. Please wait, this process takes minute.', duration: 12000,speed: 100})
+      await new Promise(resolve => setTimeout(resolve, 30000));
       
       //set asset location Basilisk
       const call3 = api.tx.assetRegistry.setLocation(3,{parents: 1, interior: "Here"});
       const result3 = await api.tx.sudo.sudo(call3).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise(resolve => setTimeout(resolve, 30000));
       
     }
     setTimeout( () => this.$router.push({ path: '/home'}));
