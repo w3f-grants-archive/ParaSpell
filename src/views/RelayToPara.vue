@@ -21,9 +21,9 @@
   import { Keyring } from '@polkadot/api'
   import { ApiPromise, WsProvider } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
-  import { encodeAddress } from '@polkadot/util-crypto'
-    import '@polkadot/api-augment';
-
+  import '@polkadot/api-augment';
+  import { decodeAddress } from '@polkadot/util-crypto'
+  
   export default defineComponent({
   
   data() {
@@ -134,9 +134,8 @@
                             finalKeyring.push(accs[acc])
                           }
                         }
-                        console.log(finalKeyring[0].address)
                         const call = api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: this.key}}}}, 
-                        {V1:{parents:0,interior:{X1:{AccountId32: {network: "Any", id: "bXmPf7DcVmFuHEmzH3UX8t6AUkfNQW8pnTeXGhFhqbfngjAak"}}}}},
+                        {V1:{parents:0,interior:{X1:{AccountId32: {network: "Any", id: decodeAddress(finalKeyring[0].address)}}}}},
                         {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
                         this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
 
