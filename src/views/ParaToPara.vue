@@ -72,7 +72,7 @@
           accs.push(keyring.createFromUri('//Dave').address);
           accs.push(keyring.createFromUri('//Eve').address);
           accs.push(keyring.createFromUri('//Ferdie').address);
-          if(this.key == 2090){
+          if(this.keyy == 2090){
             const wsProvider = new WsProvider('ws://127.0.0.1:9988');
             const api = await ApiPromise.create({ provider: wsProvider });
               for (let acc = 0; acc < accs.length; acc++) {
@@ -82,7 +82,7 @@
                 this.accounts.push({ account_id,unitbalance});
               }
             }
-            if(this.key == 2000){
+            if(this.keyy == 2000){
                 const wsProvider = new WsProvider('ws://127.0.0.1:9999');
                 const api = await ApiPromise.create({ provider: wsProvider });
                 for (let acc = 0; acc < accs.length; acc++) {
@@ -151,7 +151,6 @@
                         }
                       }
                   else if(this.key == 2000){
-                      console.log("hi")
                         const keyring = new Keyring({ type: 'sr25519' });
                         const wsProvider = new WsProvider('ws://127.0.0.1:9999');
                         const api = await ApiPromise.create({ provider: wsProvider });
