@@ -1,14 +1,14 @@
 <template>
   <div class="home">
     <b-field class="textt" label="Select origin parachain">
-    <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 1" required>
-      <option v-for="(item) in items" :key="item">{{item}}</option>
-    </b-select>
+      <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 1" required>
+        <option v-for="(item) in items" :key="item">{{item}}</option>
+      </b-select>
     </b-field>
     <b-field class="textt" label="Select account on Relay chain you wish to transfer tokens to">
-    <b-select v-model="recipient" @input.native="address($event)" placeholder="Select address" required>
-      <option v-for="(account) in accounts" :key="account.account_id">{{account.account_id}} Balance: {{account.unitbalance}}</option>
-    </b-select>
+      <b-select v-model="recipient" @input.native="address($event)" placeholder="Select address" required>
+        <option v-for="(account) in accounts" :key="account.account_id">{{account.account_id}} Balance: {{account.unitbalance}}</option>
+      </b-select>
     </b-field>
     <b-field class="textt" label="Input UNIT amount (Minimum 1000000000000)">
         <b-input style="margin-right:auto; margin-left:auto; width: 800px" @input.native="unit($event)" v-model="amount"></b-input>
@@ -41,7 +41,6 @@
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
     const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-    //console.log(`${bob.meta.name}: has address ${bob.address}`);
     const parachain = await api.query.paras.parachains()
     const queryPara = JSON.stringify(parachain)
     const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
@@ -51,111 +50,109 @@
     {
       this.items.push(extractedParas[i])
     }
-    },
+  },
 
-    methods: {
-        async para(value: any){
-            this.key=value.target.value
-            this.accounts = []
-            var unitbalance=""
+  methods: {
+    async para(value: any){
+      this.key=value.target.value
+      this.accounts = []
+      var unitbalance=""
+      const keyring = new Keyring({ type: 'sr25519' });
+      var accs = []
+      accs.push(keyring.createFromUri('//Alice').address);
+      accs.push(keyring.createFromUri('//Bob').address);
+      accs.push(keyring.createFromUri('//Charlie').address);
+      accs.push(keyring.createFromUri('//Dave').address);
+      accs.push(keyring.createFromUri('//Eve').address);
+      accs.push(keyring.createFromUri('//Ferdie').address);
+      const wsProvider = new WsProvider('ws://127.0.0.1:9944');
+      const api = await ApiPromise.create({ provider: wsProvider });
+      for (let acc = 0; acc < accs.length; acc++) {
+        let account_id = accs[acc]
+        const balance = await api.query.system.account(account_id)
+        unitbalance = balance.data.free.toString()
+        this.accounts.push({ account_id,unitbalance});
+      }
+    },
+    async address(value: any){
+      this.recipient=value.target.value
+    },
+    async unit(value: any){
+      this.amount=value.target.value
+    },
+    async sendXCM() {
+      if(this.key == 0) 
+      {
+        this.$notify({ title: 'Error', text: 'You need to select you wish to transfer from first.', type: 'error', duration: 3000,speed: 100})
+      }
+      else 
+      {
+        if(this.recipient=="")
+        {
+          this.$notify({ title: 'Error', text: 'You need to select recipient first.', type: 'error', duration: 3000,speed: 100})
+        }
+        else{
+          if(this.amount<1000000000000)
+          {
+           this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
+          }
+          else{                  
             const keyring = new Keyring({ type: 'sr25519' });
             var accs = []
-            accs.push(keyring.createFromUri('//Alice').address);
-            accs.push(keyring.createFromUri('//Bob').address);
-            accs.push(keyring.createFromUri('//Charlie').address);
-            accs.push(keyring.createFromUri('//Dave').address);
-            accs.push(keyring.createFromUri('//Eve').address);
-            accs.push(keyring.createFromUri('//Ferdie').address);
-            const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-            const api = await ApiPromise.create({ provider: wsProvider });
-            for (let acc = 0; acc < accs.length; acc++) {
-                let account_id = accs[acc]
-                const balance = await api.query.system.account(account_id)
-                unitbalance = balance.data.free.toString()
-                this.accounts.push({ account_id,unitbalance});
-            }
-      },
-        async address(value: any){
-        this.recipient=value.target.value
-      },
-      async unit(value: any){
-        this.amount=value.target.value
-      },
-      async sendXCM() {
-        if(this.key == 0) 
-        {
-          this.$notify({ title: 'Error', text: 'You need to select you wish to transfer from first.', type: 'error', duration: 3000,speed: 100})
-
-        }
-        else 
-        {
-            if(this.recipient=="")
-            {
-                this.$notify({ title: 'Error', text: 'You need to select recipient first.', type: 'error', duration: 3000,speed: 100})
-            }
-            else{
-                if(this.amount<1000000000000)
+            accs.push(keyring.createFromUri('//Alice'));
+            accs.push(keyring.createFromUri('//Bob'));
+            accs.push(keyring.createFromUri('//Charlie'));
+            accs.push(keyring.createFromUri('//Dave'));
+            accs.push(keyring.createFromUri('//Eve'));
+            accs.push(keyring.createFromUri('//Ferdie'));
+            if(this.key == 2090){
+              const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+              const api = await ApiPromise.create({ provider: wsProvider });
+              const recipientAddr = this.recipient.split(" Balance:")
+              const finalKeyring=[]
+              for(let acc = 0; acc< accs.length;acc++)
+              {
+                if(accs[acc].address == recipientAddr[0])
                 {
-                    this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
+                  finalKeyring.push(accs[acc])
                 }
-                else{                  
-                      const keyring = new Keyring({ type: 'sr25519' });
-                      var accs = []
-                      accs.push(keyring.createFromUri('//Alice'));
-                      accs.push(keyring.createFromUri('//Bob'));
-                      accs.push(keyring.createFromUri('//Charlie'));
-                      accs.push(keyring.createFromUri('//Dave'));
-                      accs.push(keyring.createFromUri('//Eve'));
-                      accs.push(keyring.createFromUri('//Ferdie'));
-                  if(this.key == 2090){
-                        const wsProvider = new WsProvider('ws://127.0.0.1:9988');
-                        const api = await ApiPromise.create({ provider: wsProvider });
-                        const recipientAddr = this.recipient.split(" Balance:")
-                        const finalKeyring=[]
-                        for(let acc = 0; acc< accs.length;acc++)
-                        {
-                          if(accs[acc].address == recipientAddr[0])
-                          {
-                            finalKeyring.push(accs[acc])
-                          }
-                        }
-                        if(finalKeyring.length!=0)
-                        {
-                          const query = api.tx.xTokens.transfer(3,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: decodeAddress(finalKeyring[0].address)}}}}}, 4600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
-                          this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                        }
-                        else{
-                          this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
-                        }
-                  }
-                  else if(this.key == 2000){
-                    const wsProvider = new WsProvider('ws://127.0.0.1:9999');
-                    const api = await ApiPromise.create({ provider: wsProvider });
-                    const recipientAddr = this.recipient.split(" Balance:")
-                    const finalKeyring=[]
-                    for(let acc = 0; acc< accs.length;acc++)
-                    {
-                      if(accs[acc].address == recipientAddr[0])
-                      {
-                        finalKeyring.push(accs[acc])
-                      }
-                    }
-                    if(finalKeyring.length!=0)
-                    {
-                      const query = api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: decodeAddress(finalKeyring[0].address)}}}}}, 4600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
-                      this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                    }
-                    else{
-                      this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
-                    }
-                  }                        
-                }
+              }
+              if(finalKeyring.length!=0)
+              {
+                const query = api.tx.xTokens.transfer(3,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: decodeAddress(finalKeyring[0].address)}}}}}, 4600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+              }
+              else{
+                this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
+              }
             }
+            else if(this.key == 2000){
+              const wsProvider = new WsProvider('ws://127.0.0.1:9999');
+              const api = await ApiPromise.create({ provider: wsProvider });
+              const recipientAddr = this.recipient.split(" Balance:")
+              const finalKeyring=[]
+              for(let acc = 0; acc< accs.length;acc++)
+              {
+                if(accs[acc].address == recipientAddr[0])
+                {
+                  finalKeyring.push(accs[acc])
+                }
+              }
+              if(finalKeyring.length!=0)
+              {
+                const query = api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: decodeAddress(finalKeyring[0].address)}}}}}, 4600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+              }
+              else{
+                this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
+              }
+            }                        
+          }
         }
       }
     }
-  })
-
+  }
+})
 </script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");

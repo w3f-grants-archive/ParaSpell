@@ -47,7 +47,6 @@
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
     const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-    //console.log(`${bob.meta.name}: has address ${bob.address}`);
     const parachain = await api.query.paras.parachains()
     const queryPara = JSON.stringify(parachain)
     const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
@@ -57,127 +56,126 @@
     {
       this.items.push(extractedParas[i])
     }
-    },
+  },
 
-    methods: {
-       async paraa(value: any){
-         this.keyy= value.target.value
-          this.accounts = []
-          var unitbalance=""
-          const keyring = new Keyring({ type: 'sr25519' });
-          var accs = []
-          accs.push(keyring.createFromUri('//Alice').address);
-          accs.push(keyring.createFromUri('//Bob').address);
-          accs.push(keyring.createFromUri('//Charlie').address);
-          accs.push(keyring.createFromUri('//Dave').address);
-          accs.push(keyring.createFromUri('//Eve').address);
-          accs.push(keyring.createFromUri('//Ferdie').address);
-          if(this.keyy == 2090){
-            const wsProvider = new WsProvider('ws://127.0.0.1:9988');
-            const api = await ApiPromise.create({ provider: wsProvider });
-              for (let acc = 0; acc < accs.length; acc++) {
-                let account_id = accs[acc]
-                const balance = await api.query.tokens.accounts(account_id, 3)
-                unitbalance = JSON.stringify(balance)
-                this.accounts.push({ account_id,unitbalance});
+  methods: {
+    async paraa(value: any){
+      this.keyy= value.target.value
+      this.accounts = []
+      var unitbalance=""
+      const keyring = new Keyring({ type: 'sr25519' });
+      var accs = []
+      accs.push(keyring.createFromUri('//Alice').address);
+      accs.push(keyring.createFromUri('//Bob').address);
+      accs.push(keyring.createFromUri('//Charlie').address);
+      accs.push(keyring.createFromUri('//Dave').address);
+      accs.push(keyring.createFromUri('//Eve').address);
+      accs.push(keyring.createFromUri('//Ferdie').address);
+      if(this.keyy == 2090){
+        const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+        const api = await ApiPromise.create({ provider: wsProvider });
+        for (let acc = 0; acc < accs.length; acc++) {
+          let account_id = accs[acc]
+          const balance = await api.query.tokens.accounts(account_id, 3)
+          unitbalance = JSON.stringify(balance)
+          this.accounts.push({ account_id,unitbalance});
+        }
+      }
+      if(this.keyy == 2000){
+        const wsProvider = new WsProvider('ws://127.0.0.1:9999');
+        const api = await ApiPromise.create({ provider: wsProvider });
+        for (let acc = 0; acc < accs.length; acc++) {
+          let account_id = accs[acc]
+          const balance = await api.query.tokens.accounts(account_id, {Token: "KSM"})
+          unitbalance = JSON.stringify(balance)
+          this.accounts.push({ account_id,unitbalance});
+        }
+      }
+    },
+    async para(value: any){
+      this.key=value.target.value
+    },
+    async address(value: any){
+      this.recipient=value.target.value
+    },
+    async unit(value: any){
+      this.amount=value.target.value
+    },
+    async sendXCM() {
+      if(this.key == 0 || this.keyy==0 || this.key==this.keyy ) 
+      {
+        this.$notify({ title: 'Error', text: 'You probably did not asign parachains correctly.', type: 'error', duration: 3000,speed: 100})
+      }
+      else 
+      {
+        if(this.recipient=="")
+        {
+          this.$notify({ title: 'Error', text: 'You need to select recipient first.', type: 'error', duration: 3000,speed: 100})
+        }
+        else{
+          if(this.amount<1000000000000)
+          {
+            this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
+          }
+          else{
+            const keyring = new Keyring({ type: 'sr25519' });
+            var accs = []
+            accs.push(keyring.createFromUri('//Alice'));
+            accs.push(keyring.createFromUri('//Bob'));
+            accs.push(keyring.createFromUri('//Charlie'));
+            accs.push(keyring.createFromUri('//Dave'));
+            accs.push(keyring.createFromUri('//Eve'));
+            accs.push(keyring.createFromUri('//Ferdie'));
+            if(this.key == 2090){
+              const keyring = new Keyring({ type: 'sr25519' });
+              const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+              const api = await ApiPromise.create({ provider: wsProvider });
+              const recipientAddr = this.recipient.split(" Balance:")
+              const finalKeyring=[]
+              for(let acc = 0; acc< accs.length;acc++)
+              {
+                if(accs[acc].address == recipientAddr[0])
+                {
+                  finalKeyring.push(accs[acc])
+                }
+              }
+              if(finalKeyring.length!=0)
+              {
+                const transac = api.tx.xTokens.transfer(3,this.amount,{V1:{parents:1,interior:{X2:[{Parachain:this.keyy},{AccountId32:{network:"Any",id:decodeAddress(finalKeyring[0].address)}}]}}},399600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+              }
+              else{
+                this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
               }
             }
-            if(this.keyy == 2000){
-                const wsProvider = new WsProvider('ws://127.0.0.1:9999');
-                const api = await ApiPromise.create({ provider: wsProvider });
-                for (let acc = 0; acc < accs.length; acc++) {
-                    let account_id = accs[acc]
-                    const balance = await api.query.tokens.accounts(account_id, {Token: "KSM"})
-                    unitbalance = JSON.stringify(balance)
-                    this.accounts.push({ account_id,unitbalance});
-                }
-            }
-       },
-        async para(value: any){
-            this.key=value.target.value
-    },
-        async address(value: any){
-        this.recipient=value.target.value
-      },
-      async unit(value: any){
-        this.amount=value.target.value
-      },
-      async sendXCM() {
-        if(this.key == 0 || this.keyy==0 || this.key==this.keyy ) 
-        {
-          this.$notify({ title: 'Error', text: 'You probably did not asign parachains correctly.', type: 'error', duration: 3000,speed: 100})
-
-        }
-        else 
-        {
-            if(this.recipient=="")
-            {
-                this.$notify({ title: 'Error', text: 'You need to select recipient first.', type: 'error', duration: 3000,speed: 100})
-            }
-            else{
-                if(this.amount<1000000000000)
+            else if(this.key == 2000){
+              const keyring = new Keyring({ type: 'sr25519' });
+              const wsProvider = new WsProvider('ws://127.0.0.1:9999');
+              const api = await ApiPromise.create({ provider: wsProvider });
+              const recipientAddr = this.recipient.split(" Balance:")
+              const finalKeyring=[]
+              for(let acc = 0; acc< accs.length;acc++)
+              {
+                if(accs[acc].address == recipientAddr[0])
                 {
-                    this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
+                  finalKeyring.push(accs[acc])
                 }
-                else{
-                  const keyring = new Keyring({ type: 'sr25519' });
-                  var accs = []
-                  accs.push(keyring.createFromUri('//Alice'));
-                  accs.push(keyring.createFromUri('//Bob'));
-                  accs.push(keyring.createFromUri('//Charlie'));
-                  accs.push(keyring.createFromUri('//Dave'));
-                  accs.push(keyring.createFromUri('//Eve'));
-                  accs.push(keyring.createFromUri('//Ferdie'));
-                  if(this.key == 2090){
-                        const keyring = new Keyring({ type: 'sr25519' });
-                        const wsProvider = new WsProvider('ws://127.0.0.1:9988');
-                        const api = await ApiPromise.create({ provider: wsProvider });
-                        const recipientAddr = this.recipient.split(" Balance:")
-                        const finalKeyring=[]
-                        for(let acc = 0; acc< accs.length;acc++)
-                        {
-                          if(accs[acc].address == recipientAddr[0])
-                          {
-                            finalKeyring.push(accs[acc])
-                          }
-                        }
-                        if(finalKeyring.length!=0)
-                        {
-                          const transac = api.tx.xTokens.transfer(3,this.amount,{V1:{parents:1,interior:{X2:[{Parachain:this.keyy},{AccountId32:{network:"Any",id:decodeAddress(finalKeyring[0].address)}}]}}},399600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
-                          this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                        }
-                        else{
-                          this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
-                        }
-                      }
-                  else if(this.key == 2000){
-                        const keyring = new Keyring({ type: 'sr25519' });
-                        const wsProvider = new WsProvider('ws://127.0.0.1:9999');
-                        const api = await ApiPromise.create({ provider: wsProvider });
-                        const recipientAddr = this.recipient.split(" Balance:")
-                        const finalKeyring=[]
-                        for(let acc = 0; acc< accs.length;acc++)
-                        {
-                          if(accs[acc].address == recipientAddr[0])
-                          {
-                            finalKeyring.push(accs[acc])
-                          }
-                        }
-                        if(finalKeyring.length!=0)
-                        {
-                          const transac = api.tx.xTokens.transfer({Token: "KSM"}, this.amount, {V1:{parents:1,interior:{X2: [{Parachain:this.keyy}, {AccountId32:{network: "Any", id: decodeAddress(finalKeyring[0].address)}}]}}},399600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
-                          this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                        }
-                        else{
-                          this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
-                        }
-                  }                        
-                }
-            }
+              }
+              if(finalKeyring.length!=0)
+              {
+                const transac = api.tx.xTokens.transfer({Token: "KSM"}, this.amount, {V1:{parents:1,interior:{X2: [{Parachain:this.keyy}, {AccountId32:{network: "Any", id: decodeAddress(finalKeyring[0].address)}}]}}},399600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+              }
+              else{
+                this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
+              }
+            }                        
+          }
         }
       }
     }
-  })
+  }
+})
 
 </script>
 <style scoped>

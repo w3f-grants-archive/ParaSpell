@@ -1,14 +1,14 @@
 <template>
   <div class="home">
     <b-field class="textt" label="Select parachain 1">
-    <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 1" required>
-      <option v-for="(item) in items" :key="item">{{item}}</option>
-    </b-select>
+      <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 1" required>
+        <option v-for="(item) in items" :key="item">{{item}}</option>
+      </b-select>
     </b-field>
     <b-field class="textt" label="Select parachain 2">
-    <b-select v-model="keyy" @input.native="paraa($event)" placeholder="Select parachain 2" required>
-      <option v-for="(item) in items" :key="item">{{item}}</option>
-    </b-select>
+      <b-select v-model="keyy" @input.native="paraa($event)" placeholder="Select parachain 2" required>
+        <option v-for="(item) in items" :key="item">{{item}}</option>
+      </b-select>
     </b-field>
     <b-button class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
     <b-button class="buttonn"  tag="router-link" to="/menu" type="is-link">Back to main menu</b-button>
@@ -34,7 +34,6 @@
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
     const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-    //console.log(`${bob.meta.name}: has address ${bob.address}`);
     const parachain = await api.query.paras.parachains()
     const queryPara = JSON.stringify(parachain)
     const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
@@ -44,44 +43,43 @@
     {
       this.items.push(extractedParas[i])
     }
+  },
+
+  methods: {
+    async para(value: any){
+      this.key=value.target.value
     },
+    async paraa(value: any){
+      this.keyy = value.target.value
+    },
+    async openChannels() {
+      if(this.key == 0 || this.keyy == 0 || this.key == this.keyy) 
+      {
+        this.$notify({ title: 'Error', text: 'You need to select different parachains.', type: 'error', duration: 3000,speed: 100})
 
-    methods: {
-      async para(value: any){
-        this.key=value.target.value
-      },
-      async paraa(value: any){
-        this.keyy = value.target.value
-      },
-      async openChannels() {
-        if(this.key == 0 || this.keyy == 0 || this.key == this.keyy) 
-        {
-          this.$notify({ title: 'Error', text: 'You need to select different parachains.', type: 'error', duration: 3000,speed: 100})
+      }
+      else 
+      {
+        const keyring = new Keyring({ type: 'sr25519' });
+        const wsProvider = new WsProvider('ws://127.0.0.1:9944');
+        const api = await ApiPromise.create({ provider: wsProvider });
+        const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
+        console.log(`${bob.meta.name}: has address ${bob.address}`);
 
-        }
-        else 
-        {
-          //import keyring from "@polkadot/ui-keyring"
-          const keyring = new Keyring({ type: 'sr25519' });
-          const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-          const api = await ApiPromise.create({ provider: wsProvider });
-          const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-          console.log(`${bob.meta.name}: has address ${bob.address}`);
-
-          //Open HRMP channels
-          const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.key,this.keyy,8,1000);
-          const hrmp1 = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-          this.$notify({ title: 'Opening channel 1', text: 'Channel 2 will open in 10 seconds.', duration: 10000,speed: 100})
-          await new Promise(resolve => setTimeout(resolve, 10000));
-          const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.keyy,this.key,8,1000);
-          const hrmp2 = await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-          this.$notify({ title: 'Opening channel 2', text: 'This will take 10 seconds', duration: 10000,speed: 100})
-          await new Promise(resolve => setTimeout(resolve, 10000));
-          this.$notify({ title: 'Success', text: 'Channels should be open within minute from now.', type: 'success', duration: 10000,speed: 100})
-        }
+        //Open HRMP channels
+        const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.key,this.keyy,8,1000);
+        const hrmp1 = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+        this.$notify({ title: 'Opening channel 1', text: 'Channel 2 will open in 10 seconds.', duration: 10000,speed: 100})
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.keyy,this.key,8,1000);
+        const hrmp2 = await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+        this.$notify({ title: 'Opening channel 2', text: 'This will take 10 seconds', duration: 10000,speed: 100})
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        this.$notify({ title: 'Success', text: 'Channels should be open within minute from now.', type: 'success', duration: 10000,speed: 100})
       }
     }
-  })
+  }
+})
 
 </script>
 <style scoped>

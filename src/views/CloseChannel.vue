@@ -2,14 +2,13 @@
   <div class="home">
     <b-field class="textt" label="Currently there are following channels:"></b-field>
     <b-field class="paras" v-for="(channel) in channelsOpen" :key="channel">{{channel}}</b-field>
-      <b-field class="textt" label="Select parachain you wish to close channels for.">
+    <b-field class="textt" label="Select parachain you wish to close channels for.">
       <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 2" required>
-      <option v-for="(item) in items" :key="item">{{item}}</option>
+        <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
-      </b-field>
-      <b-button class="buttonn"  type="is-primary" @click="closeChannels">Close parachain channels</b-button>
-      <b-button class="buttonn"  tag="router-link" to="/menu" type="is-link">Back to main menu</b-button>
-  
+    </b-field>
+    <b-button class="buttonn"  type="is-primary" @click="closeChannels">Close parachain channels</b-button>
+    <b-button class="buttonn"  tag="router-link" to="/menu" type="is-link">Back to main menu</b-button>
   </div>
 </template>
 <script lang="ts">
@@ -66,54 +65,42 @@
     },
   },
   mounted: async function () {
-        const keyring = new Keyring({ type: 'sr25519' });
-        const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-        const api = await ApiPromise.create({ provider: wsProvider });
-        const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-        //console.log(`${bob.meta.name}: has address ${bob.address}`);
-        const channels = await api.query.hrmp.hrmpChannels.entries()
-        channels.forEach(([{ args: [era, nominatorId] }, value]) => {
-        this.channelss.push(JSON.stringify(era))    });
-        const leng = this.channelss.length 
-        for (let i=0; i<leng;i++)
-        {
-            var result = this.channelss[i]
-            var res = []
-            //this.channelss.shift();
-            res = result.split('{"sender":').join(',').split(',"recipient":').join(',').split('}').join(',').split(',')
-            res.shift()
-            res.pop()
-            const newArr = res.map((i) => Number(i));
-            this.senders.push(newArr[0])
-            this.recipients.push(newArr[1])
+    const keyring = new Keyring({ type: 'sr25519' });
+    const wsProvider = new WsProvider('ws://127.0.0.1:9944');
+    const api = await ApiPromise.create({ provider: wsProvider });
+    const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
+    const channels = await api.query.hrmp.hrmpChannels.entries()
+    channels.forEach(([{ args: [era, nominatorId] }, value]) => {
+    this.channelss.push(JSON.stringify(era))    });
+    const leng = this.channelss.length 
+    for (let i=0; i<leng;i++)
+    {
+      var result = this.channelss[i]
+      var res = []
+      res = result.split('{"sender":').join(',').split(',"recipient":').join(',').split('}').join(',').split(',')
+      res.shift()
+      res.pop()
+      const newArr = res.map((i) => Number(i));
+      this.senders.push(newArr[0])
+      this.recipients.push(newArr[1])
 
-        }
-        //console.log(`${bob.meta.name}: has address ${bob.address}`);
-        const parachain = await api.query.paras.parachains()
-        const queryPara = JSON.stringify(parachain)
-        const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
-        const results = newParas.filter(element => {return element !== "";});
-        const extractedParas = results.map((i) => Number(i));
-        for (let i=0;extractedParas.length>i; i++)
-        {
-          this.items.push(extractedParas[i])
-        }
-        for(let i=0;leng>i;i++)
-        {
-          var count = i+1
-          this.channelsOpen.push("Channel " + count + " - Parachain 1: " + this.senders[i] + " Parachain 2: " + this.recipients[i])
-        }
-        //console.log(this.channelss)
-    //const queryPara = JSON.stringify(parachain)
-    //const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
-    //const results = newParas.filter(element => {return element !== "";});
-    //const extractedParas = results.map((i) => Number(i));
-    //for (let i=0;extractedParas.length>i; i++)
-    //{
-    //  this.items.push(extractedParas[i])
-    //}
-    },
-  })
+    }
+    const parachain = await api.query.paras.parachains()
+    const queryPara = JSON.stringify(parachain)
+    const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
+    const results = newParas.filter(element => {return element !== "";});
+    const extractedParas = results.map((i) => Number(i));
+    for (let i=0;extractedParas.length>i; i++)
+    {
+      this.items.push(extractedParas[i])
+    }
+    for(let i=0;leng>i;i++)
+    {
+      var count = i+1
+      this.channelsOpen.push("Channel " + count + " - Parachain 1: " + this.senders[i] + " Parachain 2: " + this.recipients[i])
+    }
+  },
+})
   
 </script>
 <style scoped>
