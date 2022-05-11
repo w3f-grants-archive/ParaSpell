@@ -11,6 +11,10 @@ Install polkadot, karura, basilisk and dependencies. After running **make initia
 ```
 make install
 ```
+Relaunch network after it was put down.
+```
+make launch
+```
 
 ### Running Polkachange application
 ```

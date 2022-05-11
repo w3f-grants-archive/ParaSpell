@@ -14,4 +14,7 @@ initialize:
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 	npm install -g polkadot-launch
 	apt-get install -y git clang curl libssl-dev llvm libudev-dev
+.PHONY: launch
+launch:
+	cd ./Basilisk-node/rococo-local/ && polkadot-launch basilisk-karura.json
 	
