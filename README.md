@@ -10,7 +10,7 @@ sudo apt install git make
 ## Initializing localhost setup:
 ### 1. Install dependencies 
 ```
-make initialize
+sudo make initialize
 ```
 
 ### 2. Install rust 
