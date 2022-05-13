@@ -11,6 +11,7 @@ install:
 	cd ./Basilisk-node/rococo-local/ && polkadot-launch basilisk-karura.json
 .PHONY: initialize
 initialize:
+	cd .. && chmod 777 ./Polkachange
 	apt install curl npm
 	npm install -g polkadot-launch
 	apt-get install -y git clang curl libssl-dev llvm libudev-dev
