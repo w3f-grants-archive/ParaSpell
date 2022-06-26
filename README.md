@@ -23,6 +23,7 @@ sudo make initialize
 #### 1.2 MacOs
 ```
 make initializemac
+(Make sure you have sufficient permissions for usage of npm commands)
 ```
 
 ### 2. Install rust 
