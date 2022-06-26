@@ -3,14 +3,27 @@
 
 ## Prerequisites
 ### Git and Make
+#### Linux
 ```
 sudo apt install git make
+```
+#### MacOs
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install make git
 ```
 
 ## Initializing localhost setup:
 ### 1. Install dependencies 
+
+#### 1.1 Ubuntu
 ```
 sudo make initialize
+```
+#### 1.2 MacOs
+```
+make initializemac
+(Make sure you have sufficient permissions for usage of npm commands)
 ```
 
 ### 2. Install rust 
