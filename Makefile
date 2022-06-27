@@ -24,7 +24,7 @@ rustup:
 .PHONY: initializemac
 initializemac:
 	cd .. && chmod 777 ./Polkachange
-	brew install curl npm git openssl make llvm protobuf python@3.9
+	brew install curl node@16 git openssl make llvm protobuf python@3.9 
 	npm install -g polkadot-launch
 
 .PHONY: launch
