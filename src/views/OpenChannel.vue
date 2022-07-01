@@ -1,17 +1,16 @@
 <template>
-  <div class="home">
-    <b-field class="textt" label="Select parachain 1">
-      <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 1" required>
+  <div id="app">
+    <b-field style="margin-top:35%" label-position="inside" class="textt" label="Select parachain 1">
+      <b-select placeholder="Parachain 1" expanded style="text-align: center;" v-model="key" @input.native="para($event)" required>
         <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
     </b-field>
-    <b-field class="textt" label="Select parachain 2">
-      <b-select v-model="keyy" @input.native="paraa($event)" placeholder="Select parachain 2" required>
+    <b-field label-position="inside" class="textt" label="Select parachain 2">
+      <b-select placeholder="Parachain 2" expanded style="text-align: center;" v-model="keyy" @input.native="paraa($event)" required>
         <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
     </b-field>
-    <b-button class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
-    <b-button class="buttonn"  tag="router-link" to="/menu" type="is-link">Back to main menu</b-button>
+    <b-button expanded class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
   </div>
 </template>
 <script lang="ts">
@@ -23,9 +22,9 @@
   
   data() {
     return {
-      items: [] as Array<number>,
-      key: 0 as number,
-      keyy: 0 as number,
+      items: [] as Array<string>,
+      key: "" as string,
+      keyy: "" as string,
       };
     },
 
@@ -41,7 +40,10 @@
     const extractedParas = results.map((i) => Number(i));
     for (let i=0;extractedParas.length>i; i++)
     {
-      this.items.push(extractedParas[i])
+      if (extractedParas[i] == 2090)
+      this.items.push("Basilisk")
+      else if(extractedParas[i]== 2000)
+      this.items.push("Karura")
     }
   },
 
@@ -53,25 +55,39 @@
       this.keyy = value.target.value
     },
     async openChannels() {
-      if(this.key == 0 || this.keyy == 0 || this.key == this.keyy) 
+
+      if(this.key == "" || this.keyy == "" || this.key == this.keyy) 
       {
         this.$notify({ title: 'Error', text: 'You need to select different parachains.', type: 'error', duration: 3000,speed: 100})
 
       }
       else 
       {
+        
         const keyring = new Keyring({ type: 'sr25519' });
         const wsProvider = new WsProvider('ws://127.0.0.1:9944');
         const api = await ApiPromise.create({ provider: wsProvider });
         const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
         console.log(`${bob.meta.name}: has address ${bob.address}`);
-
+        var para1 = 0
+        var para2 = 0
         //Open HRMP channels
-        const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.key,this.keyy,8,1000);
+        if(this.key == "Karura")
+        para1=2000
+        else if(this.key == "Basilisk")
+        para1=2090
+
+        if(this.keyy == "Karura")
+        para2=2000
+        else if(this.keyy == "Basilisk")
+        para2=2090
+
+
+        const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
         const hrmp1 = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
         this.$notify({ title: 'Opening channel 1', text: 'Channel 2 will open in 10 seconds.', duration: 10000,speed: 100})
         await new Promise(resolve => setTimeout(resolve, 10000));
-        const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(this.keyy,this.key,8,1000);
+        const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para2,para1,8,1000);
         const hrmp2 = await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
         this.$notify({ title: 'Opening channel 2', text: 'This will take 10 seconds', duration: 10000,speed: 100})
         await new Promise(resolve => setTimeout(resolve, 10000));
@@ -83,22 +99,20 @@
 
 </script>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");
-.buttonn{
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  background-color: white;
   margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
-  display: block;
+  margin-left: 20%;
+  margin-right: 20%;
 }
-    select {
-        width: 150px;
-        margin: 10px;
-    }
-    select:focus {
-        min-width: 150px;
-        width: auto;
-    }
+
+@import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");
+
 .textt{
   color: black;
   font-family: "Anybody", cursive;

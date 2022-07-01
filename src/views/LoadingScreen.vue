@@ -1,5 +1,5 @@
 <template>
-        <b-field class="textt" label="Please wait while application is setting up for first time."></b-field>
+        <b-field style="margin-top:35%"  class="textt" label="Please wait while application is setting up for first time."></b-field>
 </template>
 
 <script lang="ts">

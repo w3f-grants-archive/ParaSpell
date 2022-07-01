@@ -1,15 +1,33 @@
 <template>
-  <div>
-    <b-button class="buttonn" tag="router-link" to="/menu" type="is-link">Login as Alice</b-button>
-  </div>
+    <b-carousel>
+        <b-carousel-item v-for="(carousel, i) in carousels" :key="i">
+            <section :class="`hero is-medium`">
+                <div class="hero-body has-text-centered">
+                    <b-image :src="carousel.image" /> 
+                </div>
+            </section>
+        </b-carousel-item>
+    </b-carousel>
 </template>
 
-<style scoped>
-.buttonn {
-  margin-top: 20px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
+<script>
+export default {
+    data(){
+        return {
+            carousels: [
+                {
+                    title: 'Slide 1',
+                    image: require("@/assets/polkachange.svg")
+                },                {
+                    title: 'Slide 2',
+                    image: require("@/assets/polkachange.svg")
+                },
+                {
+                    title: 'Slide 3',
+                    image: require("@/assets/polkachange.svg")
+                },
+            ]
+        }
+    }
 }
-</style>
+</script>
