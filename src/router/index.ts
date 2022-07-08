@@ -58,22 +58,6 @@ const routes: Array<RouteConfig> = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/OpenChannel.vue')
   },
-  {
-    path: '/menu',
-    name: 'menuScreen',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/MenuView.vue')
-  },
-  {
-    path: '/send',
-    name: 'XCMtransaction',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SendTransact.vue')
-  }
 
 ]
 

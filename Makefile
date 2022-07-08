@@ -3,12 +3,14 @@ install:
 	rustup default nightly
 	rustup target add wasm32-unknown-unknown
 	git clone https://github.com/paritytech/polkadot.git
-	cd ./polkadot/ && git checkout release-v0.9.19 && cargo build --release
+	cd ./polkadot/ && git checkout release-v0.9.24 && cargo build --release
 	git clone https://github.com/galacticcouncil/Basilisk-node.git
 	cd ./Basilisk-node/ && make build
 	git clone https://github.com/AcalaNetwork/Acala.git
 	cd ./Acala/ && make init && make build-karura-internal-release
-	cd ./Basilisk-node/rococo-local/ && polkadot-launch basilisk-karura.json
+	git clone https://github.com/PureStake/moonbeam
+	cd moonbeam && cargo build --release
+	polkadot-launch Nacala-moonbeam-basilisk.json
 
 .PHONY: initialize
 initialize:
@@ -29,5 +31,5 @@ initializemac:
 
 .PHONY: launch
 launch:
-	cd ./Basilisk-node/rococo-local/ && polkadot-launch basilisk-karura.json
+	polkadot-launch acala-moonbeam-basilisk.json
 	

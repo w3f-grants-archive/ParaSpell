@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-field style="margin-top:35%" label-position="inside" class="textt" label="Select parachain 1">
+    <b-field style="margin-top:25%" label-position="inside" class="textt" label="Select parachain 1">
       <b-select placeholder="Parachain 1" expanded style="text-align: center;" v-model="key" @input.native="para($event)" required>
         <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
@@ -44,6 +44,8 @@
       this.items.push("Basilisk")
       else if(extractedParas[i]== 2000)
       this.items.push("Karura")
+      else if(extractedParas[i]== 1000)
+      this.items.push("Moonbeam")
     }
   },
 
@@ -76,12 +78,15 @@
         para1=2000
         else if(this.key == "Basilisk")
         para1=2090
+        else if(this.key == "Moonbeam")
+        para1=1000
 
         if(this.keyy == "Karura")
         para2=2000
         else if(this.keyy == "Basilisk")
         para2=2090
-
+        else if(this.keyy == "Moonbeam")
+        para2=1000
 
         const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
         const hrmp1 = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });

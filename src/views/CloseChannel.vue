@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-field style="margin-top:35%; margin-bottom: 8%;" class="textt" label="Currently there are following channels:"></b-field>
+    <b-field style="margin-top:25%; margin-bottom: 8%;" class="textt" label="Currently there are following channels:"></b-field>
     <b-field class="paras" v-for="(channel) in channelsOpen" :key="channel">{{channel}}
       <b-button type=" is-danger" outlined style="margin-top:-10px; margin-left:10px" @click="closeChannels(channel)" label="Close"></b-button>
     </b-field>
@@ -37,6 +37,10 @@
       else if(closingCha[0] == "Basilisk")
       {
         paraID = 2090
+      }
+      else if(closingCha[0] == "Moonbeam")
+      {
+        paraID = 1000
       }
       this.$notify({ title: 'Request', text: 'Channels for chosen parachain are currently being closed.', duration: 4000,speed: 100})
       const keyring = new Keyring({ type: 'sr25519' });
@@ -76,10 +80,14 @@
         this.sendersstr.push("Karura")
       else if(newArr[0] == 2090)
         this.sendersstr.push("Basilisk")
+      else if(newArr[0] == 1000)
+        this.sendersstr.push("Moonbeam")
       if(newArr[1] == 2000)
         this.recipientsstr.push("Karura")
       else if(newArr[1] == 2090)
         this.recipientsstr.push("Basilisk")
+      else if(newArr[1] == 1000)
+        this.recipientsstr.push("Moonbeam")
 
 
     }

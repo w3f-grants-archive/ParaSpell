@@ -1,5 +1,5 @@
 <template>
-        <b-field style="margin-top:35%"  class="textt" label="Please wait while application is setting up for first time."></b-field>
+        <b-field style="margin-top:25%"  class="textt" label="Please wait while application is setting up for first time."></b-field>
 </template>
 
 <script lang="ts">
@@ -13,10 +13,10 @@ export default defineComponent({
     //We register currency
     const keyring = new Keyring({ type: 'sr25519' });
     //basilisk
-    const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+    const wsProvider = new WsProvider('ws://127.0.0.1:9989');
     const api = await ApiPromise.create({ provider: wsProvider });
     //acala
-    const wsProvider2 = new WsProvider('ws://127.0.0.1:9999');
+    const wsProvider2 = new WsProvider('ws://127.0.0.1:9988');
     const api2 = await ApiPromise.create({ provider: wsProvider2 });
 
     const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });

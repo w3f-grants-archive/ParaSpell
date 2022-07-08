@@ -10,21 +10,21 @@
     </b-carousel>
 </template>
 
-<script>
+<script lang="ts">
 export default {
     data(){
         return {
             carousels: [
                 {
                     title: 'Slide 1',
-                    image: require("@/assets/polkachange.svg")
+                    image: require("@/assets/main.jpg")
                 },                {
                     title: 'Slide 2',
-                    image: require("@/assets/polkachange.svg")
+                    image: require("@/assets/graphimg.jpg")
                 },
                 {
                     title: 'Slide 3',
-                    image: require("@/assets/polkachange.svg")
+                    image: require("@/assets/diagram.jpg")
                 },
             ]
         }
