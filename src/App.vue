@@ -29,13 +29,26 @@
             <b-navbar-item style="margin-right: 13%;" class="top"  tag="router-link" to="/paratopara" type="is-link">
                 Transfer
             </b-navbar-item>  
-            <b-navbar-item class="top" tag="div">
-                <div class="buttons">
-                    <a class="button is-light">
-                        Log in
-                    </a>
-                </div>
-            </b-navbar-item>
+            <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in as" >
+                <b-navbar-item @click.native="loginn('Alice')">
+                    Alice
+                </b-navbar-item>
+                <b-navbar-item @click.native="loginn('Bob')">
+                    Bob
+                </b-navbar-item>
+                <b-navbar-item @click.native="loginn('Charlie')">
+                    Charlie
+                </b-navbar-item>
+                <b-navbar-item @click.native="loginn('Dave')">
+                    Dave
+                </b-navbar-item>
+                <b-navbar-item @click.native="loginn('Eve')">
+                    Eve
+                </b-navbar-item>
+                <b-navbar-item @click.native="loginn('Ferdie')">
+                    Ferdie
+                </b-navbar-item>
+            </b-navbar-dropdown>
         </template>
     </b-navbar>
     <router-view/>
@@ -43,20 +56,26 @@
     </div>
 </template>
 
-<script>
-export default {
-    data(){
-        return {
-            carousels: [
-                { text: 'Slide 1', color: 'primary' },
-                { text: 'Slide 2', color: 'info' },
-                { text: 'Slide 3', color: 'success' },
-                { text: 'Slide 4', color: 'warning' },
-                { text: 'Slide 5', color: 'danger' }
-            ]
-        }
+<script lang="ts">
+  import { defineComponent } from '@vue/composition-api'
+  import '@polkadot/api-augment';
+  import useStore from "vuex";
+import store from './store';
+  export default defineComponent({
+  name: "LoginData",
+  data() {
+    return {
+        login: "" as string,
+      };
+    },
+
+    methods:{
+    async loginn(value: any){
+      this.login=value
+      store.commit('saveAccount', this.login)
+    },  
     }
-}
+})
 </script>
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");

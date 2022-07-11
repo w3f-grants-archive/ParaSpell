@@ -1,20 +1,25 @@
 <template>
-  <div class="home">
-    <b-field class="textt" label="Select origin parachain">
-      <b-select v-model="key" @input.native="para($event)" placeholder="Select parachain 1" required>
+  <div id="app">
+    <div class="box" style="margin-top: 25%;  font-family: 'Anybody', cursive;">
+     You are logged in as {{$store.state.account}}.
+    </div>
+    <b-field class="textt"  label-position="inside" label="Select origin parachain">
+      <b-select expanded v-model="key" placeholder="Select parachain 1" required>
         <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
     </b-field>
-    <b-field class="textt" label="Select account on Relay chain you wish to transfer tokens to">
-      <b-select v-model="recipient" @input.native="address($event)" placeholder="Select address" required>
-        <option v-for="(account) in accounts" :key="account.account_id">{{account.account_id}} Balance: {{account.unitbalance}}</option>
+    <b-field class="textt" label-position="inside" label="Input recipient address">
+        <b-input expanded @input.native="addrs($event)" v-model="addr"></b-input>
+    </b-field>
+     <b-field class="textt" label-position="inside" label="Select currency">
+      <b-select expanded v-model="currency" @input.native="asignCur($event)" placeholder="Select currency" required>
+         <option v-for="(currency) in currencies" :key="currency">{{currency}}</option>
       </b-select>
     </b-field>
-    <b-field class="textt" label="Input UNIT amount (Minimum 1000000000000)">
-        <b-input style="margin-right:auto; margin-left:auto; width: 800px" @input.native="unit($event)" v-model="amount"></b-input>
+    <b-field class="textt" label-position="inside" label="Input currency amount">
+        <b-input expanded @input.native="unit($event)" v-model="amount"></b-input>
     </b-field>
-    <b-button class="buttonn"  type="is-primary" @click="sendXCM">Send transaction</b-button>
-    <b-button class="buttonn"  tag="router-link" to="/send" type="is-link">Back to send menu</b-button>
+    <b-button class="buttonn" expanded type="is-primary" @click="sendXCM($store.state.account)">Send transaction</b-button>
   </div>
 </template>
 <script lang="ts">
@@ -28,11 +33,14 @@
   
   data() {
     return {
-      items: [] as Array<number>,
-      key: 0 as number,
-      amount: 0 as number,
-      accounts: [] as Array<any>,
-      recipient: "" as string,
+        items: [] as Array<string>,
+        key: "" as string,
+        addr: "" as string,
+        amount: 0 as number,
+        currency: "" as string,
+        currencies: [] as Array<string>,
+        accounts: [] as Array<any>,
+        recipient: "" as string,
       };
     },
 
@@ -48,46 +56,38 @@
     const extractedParas = results.map((i) => Number(i));
     for (let i=0;extractedParas.length>i; i++)
     {
-      this.items.push(extractedParas[i])
+      if (extractedParas[i] == 2090)
+      this.items.push("Basilisk")
+      else if(extractedParas[i]== 2000)
+      this.items.push("Karura")
+      else if(extractedParas[i] == 1000)
+      this.items.push("Moonbeam")
     }
+
+    this.currencies.push("UNIT")
   },
 
   methods: {
-    async para(value: any){
-      this.key=value.target.value
-      this.accounts = []
-      var unitbalance=""
-      const keyring = new Keyring({ type: 'sr25519' });
-      var accs = []
-      accs.push(keyring.createFromUri('//Alice').address);
-      accs.push(keyring.createFromUri('//Bob').address);
-      accs.push(keyring.createFromUri('//Charlie').address);
-      accs.push(keyring.createFromUri('//Dave').address);
-      accs.push(keyring.createFromUri('//Eve').address);
-      accs.push(keyring.createFromUri('//Ferdie').address);
-      const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-      const api = await ApiPromise.create({ provider: wsProvider });
-      for (let acc = 0; acc < accs.length; acc++) {
-        let account_id = accs[acc]
-        const balance = await api.query.system.account(account_id)
-        unitbalance = balance.data.free.toString()
-        this.accounts.push({ account_id,unitbalance});
-      }
-    },
     async address(value: any){
       this.recipient=value.target.value
+    },
+    async addrs(value: any){
+      this.addr=value.target.value
+    },
+    async asignCur(value: any){
+      this.currency=value.target.value
     },
     async unit(value: any){
       this.amount=value.target.value
     },
-    async sendXCM() {
-      if(this.key == 0) 
+    async sendXCM(address: string) {
+      if(this.key == "") 
       {
         this.$notify({ title: 'Error', text: 'You need to select you wish to transfer from first.', type: 'error', duration: 3000,speed: 100})
       }
       else 
       {
-        if(this.recipient=="")
+        if(this.addr=="")
         {
           this.$notify({ title: 'Error', text: 'You need to select recipient first.', type: 'error', duration: 3000,speed: 100})
         }
@@ -96,57 +96,30 @@
           {
            this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
           }
-          else{                  
+          else{         
+            var account = "//"+address         
             const keyring = new Keyring({ type: 'sr25519' });
-            var accs = []
-            accs.push(keyring.createFromUri('//Alice'));
-            accs.push(keyring.createFromUri('//Bob'));
-            accs.push(keyring.createFromUri('//Charlie'));
-            accs.push(keyring.createFromUri('//Dave'));
-            accs.push(keyring.createFromUri('//Eve'));
-            accs.push(keyring.createFromUri('//Ferdie'));
-            if(this.key == 2090){
+            if(this.key == "Basilisk"){
+              const wsProvider = new WsProvider('ws://127.0.0.1:9989');
+              const api = await ApiPromise.create({ provider: wsProvider });
+              const query = api.tx.xTokens.transfer(3,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+              this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+            }
+            else if(this.key == "Karura"){
               const wsProvider = new WsProvider('ws://127.0.0.1:9988');
               const api = await ApiPromise.create({ provider: wsProvider });
-              const recipientAddr = this.recipient.split(" Balance:")
-              const finalKeyring=[]
-              for(let acc = 0; acc< accs.length;acc++)
-              {
-                if(accs[acc].address == recipientAddr[0])
-                {
-                  finalKeyring.push(accs[acc])
-                }
-              }
-              if(finalKeyring.length!=0)
-              {
-                const query = api.tx.xTokens.transfer(3,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: decodeAddress(finalKeyring[0].address)}}}}}, 4600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
-                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-              }
-              else{
-                this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
-              }
-            }
-            else if(this.key == 2000){
+              const query = api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+              this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+
+            }                      
+            else if (this.key == "Moonbeam"){
               const wsProvider = new WsProvider('ws://127.0.0.1:9999');
               const api = await ApiPromise.create({ provider: wsProvider });
-              const recipientAddr = this.recipient.split(" Balance:")
-              const finalKeyring=[]
-              for(let acc = 0; acc< accs.length;acc++)
-              {
-                if(accs[acc].address == recipientAddr[0])
-                {
-                  finalKeyring.push(accs[acc])
-                }
-              }
-              if(finalKeyring.length!=0)
-              {
-                const query = api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: decodeAddress(finalKeyring[0].address)}}}}}, 4600000000).signAndSend(keyring.createFromUri('//Alice'), (result) => { console.log(result) })
-                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-              }
-              else{
-                this.$notify({ text: 'Error ocured.', type:"error",duration: 10000,speed: 100})
-              }
-            }                        
+              const query = api.tx.polkadotXcm.reserveTransferAssets({V1: { parents:1, interior:"Here"}},
+              {V1:{parents:1,interior:{X1:{AccountId32: {network: "Any", key: this.addr}}}}},
+              {V1: [{id: {Concrete: {parents:1, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend("0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", (result) => { console.log(result) })
+              this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+            }  
           }
         }
       }
@@ -156,12 +129,17 @@
 </script>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");
-.buttonn{
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  background-color: white;
   margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
-  display: block;
+  margin-left: 20%;
+  margin-right: 20%;
 }
     select {
         width: 150px;
