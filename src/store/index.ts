@@ -5,10 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    account: "none"
   },
   getters: {
   },
   mutations: {
+    saveAccount(state, account){
+        state.account = account
+    }
   },
   actions: {
   },
