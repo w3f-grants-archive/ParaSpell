@@ -1,5 +1,5 @@
 ## Polkachange v1.0
-**Sharing fungible tokens across Polkadot paraverse using Channels and XCM messages.**
+**XCM & XCMP Developer tool**
 
 ## Prerequisites
 ### Git and Make
@@ -16,7 +16,7 @@ brew install make git
 ## Initializing localhost setup:
 ### 1. Install dependencies 
 
-#### 1.1 Ubuntu
+#### 1.1 Linux
 ```
 sudo make initialize
 ```
@@ -31,7 +31,7 @@ make initializemac
 make rustup
 ```
 
-### 3. Install polkadot, karura, basilisk and dependencies. After running **make initialize** command make sure to restart shell.
+### 3. Install Polkadot, Karura, Basilisk, Moonbeam and dependencies. After running **make initialize** command make sure to restart shell.
 ```
 make install
 ```
