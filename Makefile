@@ -10,7 +10,7 @@ install:
 	cd ./Acala/ && make init && make build-karura-internal-release
 	git clone https://github.com/PureStake/moonbeam
 	cd moonbeam && cargo build --release
-	polkadot-launch Nacala-moonbeam-basilisk.json
+	polkadot-launch acala-moonbeam-basilisk.json
 
 .PHONY: initialize
 initialize:
