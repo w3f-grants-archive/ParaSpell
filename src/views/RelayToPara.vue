@@ -19,7 +19,7 @@
     <b-field class="textt" label-position="inside" label="Input currency amount">
         <b-input expanded @input.native="unit($event)" v-model="amount"></b-input>
     </b-field>
-    <b-button class="buttonn" expanded  type="is-primary" @click="sendXCM($store.state.account)">Send transaction</b-button>
+    <b-button class="buttonn" pack="fas" icon-right="file-import" expanded  type="is-primary" @click="sendXCM($store.state.account)">Send transaction</b-button>
   </div>
 </template>
 <script lang="ts">

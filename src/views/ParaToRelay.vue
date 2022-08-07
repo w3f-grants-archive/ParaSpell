@@ -19,7 +19,7 @@
     <b-field class="textt" label-position="inside" label="Input currency amount">
         <b-input expanded @input.native="unit($event)" v-model="amount"></b-input>
     </b-field>
-    <b-button class="buttonn" expanded type="is-primary" @click="sendXCM($store.state.account)">Send transaction</b-button>
+    <b-button class="buttonn" pack="fas" icon-right="file-import" expanded type="is-primary" @click="sendXCM($store.state.account)">Send transaction</b-button>
   </div>
 </template>
 <script lang="ts">
@@ -92,7 +92,7 @@
           this.$notify({ title: 'Error', text: 'You need to select recipient first.', type: 'error', duration: 3000,speed: 100})
         }
         else{
-          if(this.amount<1000000000000)
+          if(this.amount<100)
           {
            this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
           }
@@ -102,7 +102,7 @@
             if(this.key == "Basilisk"){
               const wsProvider = new WsProvider('ws://127.0.0.1:9989');
               const api = await ApiPromise.create({ provider: wsProvider });
-              const query = api.tx.xTokens.transfer(3,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+              const query = api.tx.xTokens.transfer(0,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
               this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
             }
             else if(this.key == "Karura"){

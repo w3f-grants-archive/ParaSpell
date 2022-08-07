@@ -2,7 +2,7 @@
   <div id="app">
     <b-field style="margin-top:25%; margin-bottom: 8%;" class="textt" label="Currently there are following channels:"></b-field>
     <b-field class="paras" v-for="(channel) in channelsOpen" :key="channel">{{channel}}
-      <b-button type=" is-danger" outlined style="margin-top:-10px; margin-left:10px" @click="closeChannels(channel)" label="Close"></b-button>
+      <b-button type=" is-danger" outlined style="margin-top:-10px; margin-left:10px" @click="closeChannels(channel)" pack="fas" icon-right="xmark"></b-button>
     </b-field>
   </div>
 </template>

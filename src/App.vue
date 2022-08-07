@@ -2,6 +2,7 @@
 
 <template>
   <div id="app">
+    <vue-metamask ref="metamask" :initConnect="false"></vue-metamask>
     <b-navbar style="margin-bottom: 5%;">
         <template #start>
             <img class="mainLogo rotate" src="./assets/polkachange.svg" />
@@ -29,23 +30,33 @@
             <b-navbar-item style="margin-right: 13%;" class="top"  tag="router-link" to="/paratopara" type="is-link">
                 Transfer
             </b-navbar-item>  
-            <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in as" >
+            <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in with" >
+                <b-navbar-item   >
+                <b-icon style="margin-right:5px;" size="is-small" pack="fas" icon="wallet" custom-class="fa-bounce"></b-icon>
+                    My wallet  
+                </b-navbar-item>
                 <b-navbar-item @click.native="loginn('Alice')">
+                <b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>
                     Alice
                 </b-navbar-item>
                 <b-navbar-item @click.native="loginn('Bob')">
+                <b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>
                     Bob
                 </b-navbar-item>
                 <b-navbar-item @click.native="loginn('Charlie')">
+                <b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>
                     Charlie
                 </b-navbar-item>
                 <b-navbar-item @click.native="loginn('Dave')">
+                <b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>
                     Dave
                 </b-navbar-item>
                 <b-navbar-item @click.native="loginn('Eve')">
+                <b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>
                     Eve
                 </b-navbar-item>
-                <b-navbar-item @click.native="loginn('Ferdie')">
+                <b-navbar-item @click.native="loginn('Ferdie')"> 
+                <b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>
                     Ferdie
                 </b-navbar-item>
             </b-navbar-dropdown>
@@ -68,7 +79,6 @@ import store from './store';
         login: "" as string,
       };
     },
-
     methods:{
     async loginn(value: any){
       this.login=value

@@ -10,7 +10,7 @@
         <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
     </b-field>
-    <b-button expanded class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
+    <b-button expanded pack="fas" icon-right="code-compare" class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
   </div>
 </template>
 <script lang="ts">
