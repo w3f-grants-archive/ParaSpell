@@ -15,7 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fas);
 Vue.component('vue-fontawesome', FontAwesomeIcon);
-
 Vue.use(Notifications)
 Vue.use(VueCompositionAPI)
 Vue.use(Buefy, {

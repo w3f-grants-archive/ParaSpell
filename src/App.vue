@@ -2,11 +2,10 @@
 
 <template>
   <div id="app">
-    <vue-metamask ref="metamask" :initConnect="false"></vue-metamask>
     <b-navbar style="margin-bottom: 5%;">
         <template #start>
             <img class="mainLogo rotate" src="./assets/polkachange.svg" />
-              <h1 style="margin-right: 2%;" class="name first" >Polkachange</h1>
+              <h1 style="margin-right: 2%;" class="name first" >ParaSpell</h1>
 
             <b-navbar-item class="top" tag="router-link" to="/home" type="is-link">
                 Home
@@ -31,7 +30,7 @@
                 Transfer
             </b-navbar-item>  
             <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in with" >
-                <b-navbar-item   >
+                <b-navbar-item @click="isCardModalActive = true">
                 <b-icon style="margin-right:5px;" size="is-small" pack="fas" icon="wallet" custom-class="fa-bounce"></b-icon>
                     My wallet  
                 </b-navbar-item>
@@ -62,25 +61,53 @@
             </b-navbar-dropdown>
         </template>
     </b-navbar>
+        <b-modal v-model="isCardModalActive" :width="640" scroll="keep">
+            <b-message 
+              title="Info" 
+              type="is-info" 
+              aria-close-label="Close message">
+              Select account you wish to login with and then close this popup by clicking anywhere around these boxes.
+            </b-message>
+             <b-select placeholder="Select account" expanded style="text-align: center;" @input.native="accountLogin($event)" required>
+              <option v-for="(account, index) in accounts" :key="index">{{account}}</option>
+            </b-select>
+        </b-modal>
     <router-view/>
     <notifications/>
     </div>
 </template>
 
-<script lang="ts">
+<script>
+  import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import useStore from "vuex";
-import store from './store';
+  import store from './store';
   export default defineComponent({
-  name: "LoginData",
   data() {
     return {
-        login: "" as string,
+        login: "",
+        accounts: [],
+        acc: "",
+        isCardModalActive: false
       };
     },
+    mounted: async function () {
+        const extensions = await web3Enable("PolkadotJS")
+        if(extensions.length == 0) {
+          this.$notify({ title: 'Error', text: 'You do not have PolkadotJS extension make sure to install one if you want to use your wallet.', type: 'error', duration: 8000,speed: 100})
+          return
+        }
+        this.accounts = await web3Accounts()
+    },
     methods:{
-    async loginn(value: any){
+    async accountLogin(value){
+      var accSplit = value.target.value.split('{ "address": "')
+      accSplit = accSplit[1].split('{ "address": "')
+      accSplit = accSplit[0].split('"')
+      this.loginn(accSplit[0])
+    },
+    async loginn(value){
       this.login=value
       store.commit('saveAccount', this.login)
     },  
