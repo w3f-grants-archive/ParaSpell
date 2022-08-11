@@ -1,4 +1,4 @@
-## Polkachange v1.0
+## ParaSpell v1.0
 **XCM & XCMP Developer tool**
 
 ## Prerequisites
@@ -41,7 +41,7 @@ make install
 make launch
 ```
 
-## Running Polkachange application
+## Running ParaSpell application
 
 ### Installs dependencies and packages
 ```
