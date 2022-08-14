@@ -14,7 +14,7 @@ install:
 
 .PHONY: initialize
 initialize:
-	cd .. && chmod 777 ./Polkachange
+	cd .. && chmod 777 ./ParaSpell
 	apt install curl npm
 	npm install -g polkadot-launch
 	apt-get install -y git clang libssl-dev llvm libudev-dev
@@ -25,7 +25,7 @@ rustup:
 
 .PHONY: initializemac
 initializemac:
-	cd .. && chmod 777 ./Polkachange
+	cd .. && chmod 777 ./ParaSpell
 	brew install curl node@16 git openssl make llvm protobuf python@3.9 
 	npm install -g polkadot-launch
 
