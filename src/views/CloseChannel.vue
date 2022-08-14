@@ -43,15 +43,26 @@
       {
         paraID = 1000
       }
-      this.$notify({ title: 'Request', text: 'Channels for chosen parachain are currently being closed.', duration: 4000,speed: 100})
+
+      var counter = 0
       const keyring = new Keyring({ type: 'sr25519' });
       const wsProvider = new WsProvider('ws://127.0.0.1:9944');
       const api = await ApiPromise.create({ provider: wsProvider });
-      const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
+      const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
       const call2 = api.tx.hrmp.forceCleanHrmp(paraID,0,0);  
-      await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+      await api.tx.sudo.sudo(call2).signAndSend(alice, ({status,txHash}) => 
+                  {    
+                  if(counter == 0) {
+                    console.log(`Sudo transaction hash is ${txHash.toHex()}`)
+                    this.$notify({ title: 'Request', text: 'Channels for chosen parachain are currently being closed.', duration: 10000,speed: 100})                    
+                    counter+=1
+                  }
+                  if (status.isFinalized) {
+                    console.log(`Sudo transaction finalized at blockHash ${status.asFinalized}`);
+                    this.$notify({ title: 'Success', text: 'Channels are successfuly closed. Refresh page in to see changes.', type: 'success', duration: 10000,speed: 100})
+
+                  }});
       await new Promise(resolve => setTimeout(resolve, 4000));
-      this.$notify({ title: 'Success', text: 'Your parachain of choice should have channels closed.', type: "success", duration: 10000,speed: 100})
 
     },
     // eslint-disable-next-line 

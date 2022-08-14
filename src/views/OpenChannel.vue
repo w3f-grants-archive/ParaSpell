@@ -69,8 +69,7 @@
         const keyring = new Keyring({ type: 'sr25519' });
         const wsProvider = new WsProvider('ws://127.0.0.1:9944');
         const api = await ApiPromise.create({ provider: wsProvider });
-        const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-        console.log(`${bob.meta.name}: has address ${bob.address}`);
+        const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
         var para1 = 0
         var para2 = 0
         //Open HRMP channels
@@ -88,15 +87,36 @@
         else if(this.keyy == "Moonbeam")
         para2=1000
 
+        var counter = 0
+        var counter2 = 0
         const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
-        await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-        this.$notify({ title: 'Opening channel 1', text: 'Channel 2 will open in 10 seconds.', duration: 10000,speed: 100})
+        await api.tx.sudo.sudo(call).signAndSend(alice, ({status,txHash}) => 
+                  {
+                  if(counter == 0){     
+                    console.log(`Channel1: sudo transaction hash is ${txHash.toHex()}`)
+                    this.$notify({ title: 'Opening channel 1', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
+                    counter+=1
+                    }
+                  if (status.isFinalized) {
+                    console.log(`Channel1: sudo transaction finalized at blockHash ${status.asFinalized}`);
+                    this.$notify({ title: 'Success', text: 'Channel1 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
+
+                  } });
         await new Promise(resolve => setTimeout(resolve, 10000));
         const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para2,para1,8,1000);
-        await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-        this.$notify({ title: 'Opening channel 2', text: 'This will take 10 seconds', duration: 10000,speed: 100})
+        await api.tx.sudo.sudo(call2).signAndSend(alice, ({status,txHash}) => 
+                  {    
+                  if(counter2 == 0) {
+                    console.log(`Channel2: sudo transaction hash is ${txHash.toHex()}`)
+                    this.$notify({ title: 'Opening channel 2', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
+                    counter2+=1
+                  }
+                  if (status.isFinalized) {
+                    console.log(`Channel2: sudo transaction finalized at blockHash ${status.asFinalized}`);
+                    this.$notify({ title: 'Success', text: 'Channel2 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
+
+                  } });
         await new Promise(resolve => setTimeout(resolve, 10000));
-        this.$notify({ title: 'Success', text: 'Channels should be open within minute from now.', type: 'success', duration: 10000,speed: 100})
       }
     }
   }
