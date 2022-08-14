@@ -29,10 +29,8 @@
     },
 
   mounted: async function () {
-    const keyring = new Keyring({ type: 'sr25519' });
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
-    const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
     const parachain = await api.query.paras.parachains()
     const queryPara = JSON.stringify(parachain)
     const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
@@ -50,9 +48,11 @@
   },
 
   methods: {
+    // eslint-disable-next-line
     async para(value: any){
       this.key=value.target.value
     },
+    // eslint-disable-next-line 
     async paraa(value: any){
       this.keyy = value.target.value
     },
@@ -89,11 +89,11 @@
         para2=1000
 
         const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
-        const hrmp1 = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+        await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
         this.$notify({ title: 'Opening channel 1', text: 'Channel 2 will open in 10 seconds.', duration: 10000,speed: 100})
         await new Promise(resolve => setTimeout(resolve, 10000));
         const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para2,para1,8,1000);
-        const hrmp2 = await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+        await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
         this.$notify({ title: 'Opening channel 2', text: 'This will take 10 seconds', duration: 10000,speed: 100})
         await new Promise(resolve => setTimeout(resolve, 10000));
         this.$notify({ title: 'Success', text: 'Channels should be open within minute from now.', type: 'success', duration: 10000,speed: 100})

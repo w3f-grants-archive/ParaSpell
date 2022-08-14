@@ -27,6 +27,7 @@
   import { ApiPromise, WsProvider } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
   import { decodeAddress } from '@polkadot/util-crypto'
+  import { web3FromAddress } from "@polkadot/extension-dapp"
   import '@polkadot/api-augment';
 
   export default defineComponent({
@@ -39,16 +40,15 @@
         amount: 0 as number,
         currency: "" as string,
         currencies: [] as Array<string>,
+        // eslint-disable-next-line 
         accounts: [] as Array<any>,
         recipient: "" as string,
       };
     },
 
   mounted: async function () {
-    const keyring = new Keyring({ type: 'sr25519' });
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
-    const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
     const parachain = await api.query.paras.parachains()
     const queryPara = JSON.stringify(parachain)
     const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
@@ -68,15 +68,19 @@
   },
 
   methods: {
+    // eslint-disable-next-line 
     async address(value: any){
       this.recipient=value.target.value
     },
+    // eslint-disable-next-line 
     async addrs(value: any){
       this.addr=value.target.value
     },
+    // eslint-disable-next-line 
     async asignCur(value: any){
       this.currency=value.target.value
     },
+    // eslint-disable-next-line 
     async unit(value: any){
       this.amount=value.target.value
     },
@@ -96,30 +100,58 @@
           {
            this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
           }
-          else{         
-            var account = "//"+address         
+          else{   
             const keyring = new Keyring({ type: 'sr25519' });
+
+            if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      
+            var account = "//"+address         
             if(this.key == "Basilisk"){
               const wsProvider = new WsProvider('ws://127.0.0.1:9989');
               const api = await ApiPromise.create({ provider: wsProvider });
-              const query = api.tx.xTokens.transfer(0,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+              api.tx.xTokens.transfer(0,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
               this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
             }
             else if(this.key == "Karura"){
               const wsProvider = new WsProvider('ws://127.0.0.1:9988');
               const api = await ApiPromise.create({ provider: wsProvider });
-              const query = api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+              api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
               this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
 
             }                      
             else if (this.key == "Moonbeam"){
               const wsProvider = new WsProvider('ws://127.0.0.1:9999');
               const api = await ApiPromise.create({ provider: wsProvider });
-              const query = api.tx.polkadotXcm.reserveTransferAssets({V1: { parents:1, interior:"Here"}},
+              api.tx.polkadotXcm.reserveTransferAssets({V1: { parents:1, interior:"Here"}},
               {V1:{parents:1,interior:{X1:{AccountId32: {network: "Any", key: this.addr}}}}},
               {V1: [{id: {Concrete: {parents:1, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend("0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", (result) => { console.log(result) })
               this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
             }  
+            }
+            else
+                {
+                const injector = await web3FromAddress(address); 
+                if(this.key == "Basilisk"){
+                const wsProvider = new WsProvider('ws://127.0.0.1:9989');
+                const api = await ApiPromise.create({ provider: wsProvider });
+                api.tx.xTokens.transfer(0,this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+              }
+              else if(this.key == "Karura"){
+                const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+                const api = await ApiPromise.create({ provider: wsProvider });
+                api.tx.xTokens.transfer({Token: "KSM"},this.amount,{V1: {parents:1, interior: { X1: { AccountId32: { network: "any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}}, 4600000000).signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+
+              }                      
+              else if (this.key == "Moonbeam"){
+                const wsProvider = new WsProvider('ws://127.0.0.1:9999');
+                const api = await ApiPromise.create({ provider: wsProvider });
+                api.tx.polkadotXcm.reserveTransferAssets({V1: { parents:1, interior:"Here"}},
+                {V1:{parents:1,interior:{X1:{AccountId32: {network: "Any", key: this.addr}}}}},
+                {V1: [{id: {Concrete: {parents:1, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+              }  
+            }
           }
         }
       }

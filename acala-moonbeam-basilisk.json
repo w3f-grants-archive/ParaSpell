@@ -135,7 +135,7 @@
 			"nodes": [
 				{
 					"wsPort": 9988,
-					"port": 31300,
+					"port": 31301,
 					"name": "alice",
 					"flags": [
 						"--unsafe-ws-external",

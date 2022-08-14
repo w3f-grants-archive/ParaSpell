@@ -26,6 +26,7 @@
       };
     },
   methods: {
+    // eslint-disable-next-line
     async closeChannels(channel: any) {
       var closingC = channel.split(": ")
       var closingCha = closingC[1].split(" =>")
@@ -48,22 +49,21 @@
       const api = await ApiPromise.create({ provider: wsProvider });
       const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
       const call2 = api.tx.hrmp.forceCleanHrmp(paraID,0,0);  
-      const close = await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+      await api.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
       await new Promise(resolve => setTimeout(resolve, 4000));
       this.$notify({ title: 'Success', text: 'Your parachain of choice should have channels closed.', type: "success", duration: 10000,speed: 100})
 
     },
+    // eslint-disable-next-line 
     async para(value: any){
         this.key=value.target.value
     },
   },
   mounted: async function () {
-    const keyring = new Keyring({ type: 'sr25519' });
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
-    const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
     const channels = await api.query.hrmp.hrmpChannels.entries()
-    channels.forEach(([{ args: [era, nominatorId] }, value]) => {
+    channels.forEach(([{ args: [era] }]) => {
     this.channelss.push(JSON.stringify(era))    });
     const leng = this.channelss.length 
     for (let i=0; i<leng;i++)

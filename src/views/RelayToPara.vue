@@ -28,7 +28,7 @@
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import { decodeAddress } from '@polkadot/util-crypto'
-  import useStore from "vuex";
+  import { web3FromAddress } from "@polkadot/extension-dapp"
 
   export default defineComponent({
     name: "RelayToPara",
@@ -41,16 +41,15 @@
         amount: 0 as number,
         currency: "" as string,
         currencies: [] as Array<string>,
+        // eslint-disable-next-line 
         accounts: [] as Array<any>,
         recipient: "" as string,
         };
       },
 
   mounted: async function () {
-    const keyring = new Keyring({ type: 'sr25519' });
     const wsProvider = new WsProvider('ws://127.0.0.1:9944');
     const api = await ApiPromise.create({ provider: wsProvider });
-    const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
     const parachain = await api.query.paras.parachains()
     const queryPara = JSON.stringify(parachain)
     const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
@@ -70,15 +69,19 @@
   },
 
     methods: {
+      // eslint-disable-next-line
       async address(value: any){
         this.recipient=value.target.value
       },
+      // eslint-disable-next-line 
       async addrs(value: any){
         this.addr=value.target.value
       },
+      // eslint-disable-next-line 
       async asignCur(value: any){
         this.currency=value.target.value
       },
+      // eslint-disable-next-line 
       async unit(value: any){
         this.amount=value.target.value
       },
@@ -118,22 +121,50 @@
                 this.$notify({ text: 'You need to login first.',type: 'error', duration: 5000,speed: 100})
               }
               else{
-                var account = "//"+address
                 const keyring = new Keyring({ type: 'sr25519' });
                 const wsProvider = new WsProvider('ws://127.0.0.1:9944');
                 const api = await ApiPromise.create({ provider: wsProvider });
-
-                if(destPara ==2000 || destPara == 2090){
-                const call = api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: destPara}}}}, 
-                {V1:{parents:0,interior:{X1:{AccountId32: {network: "Any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}},
-                {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
-                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                var account = ""
+                if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie")
+                {
+                  account = "//"+address
+                  if(destPara ==2000 || destPara == 2090){
+                  api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: destPara}}}}, 
+                  {V1:{parents:0,interior:{X1:{AccountId32: {network: "Any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}},
+                  {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                  }
+                  else if(destPara==1000){
+                  api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: destPara}}}}, 
+                  {V1:{parents:0,interior:{X1:{AccountKey20: {network: "Any", key: this.addr}}}}},
+                  {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                  }
                 }
-                else if(destPara==1000){
-                const call = api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: destPara}}}}, 
-                {V1:{parents:0,interior:{X1:{AccountKey20: {network: "Any", key: this.addr}}}}},
-                {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
-                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                else
+                {
+                  const injector = await web3FromAddress(address); // finds an injector for an address
+                  console.log(`polakdotSigner ===> injector: `,injector);
+                  if(destPara ==2000 || destPara == 2090){
+                  api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: destPara}}}}, 
+                  {V1:{parents:0,interior:{X1:{AccountId32: {network: "Any", id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()}}}}},
+                  {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(address, { signer: injector.signer }, ({status,txHash}) => 
+                  {     
+                    console.log(`Transaction hash is ${txHash.toHex()}`)
+                  if (status.isFinalized) {
+                    console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
+                  }
+
+                  })
+
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                  }
+                  else if(destPara==1000){
+                  api.tx.xcmPallet.reserveTransferAssets({V1: { parents:0, interior:{ X1: {Parachain: destPara}}}}, 
+                  {V1:{parents:0,interior:{X1:{AccountKey20: {network: "Any", key: this.addr}}}}},
+                  {V1: [{id: {Concrete: {parents:0, interior: "Here"}}, fun:{ Fungible: this.amount}}]},0).signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                  }
                 }
               }
             }

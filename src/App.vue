@@ -81,7 +81,6 @@
   import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
-  import useStore from "vuex";
   import store from './store';
   export default defineComponent({
   data() {
