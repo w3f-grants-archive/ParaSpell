@@ -1,5 +1,5 @@
 <template>
-        <b-field style="margin-top:25%"  class="textt" label="Please wait while application is setting up for first time."></b-field>
+  <b-field style="margin-top:25%"  class="textt" label="Please wait while application is setting up for first time."></b-field>
 </template>
 
 <script lang="ts">
@@ -7,48 +7,68 @@
   import { ApiPromise, WsProvider } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
 
-export default defineComponent({
-  mounted: async function () {
+  export default defineComponent({
+    mounted: async function () {
 
-    //We register currency
-    const keyring = new Keyring({ type: 'sr25519' });
-    //basilisk
-    const wsProvider = new WsProvider('ws://127.0.0.1:9989');
-    const api = await ApiPromise.create({ provider: wsProvider });
-    //acala
-    const wsProvider2 = new WsProvider('ws://127.0.0.1:9988');
-    const api2 = await ApiPromise.create({ provider: wsProvider2 });
-
-    //const wsProvider3 = new WsProvider('ws://127.0.0.1:9999');
-    //const api3 = await ApiPromise.create({ provider: wsProvider3 });
-
-    const bob = keyring.addFromUri('//Alice', { name: 'Alice default' });
-    const quer = await api.query.assetRegistry.assetIds.entries()
-    const query = await api2.query.assetRegistry.assetMetadatas.entries()
-
-    if(quer.length<4 && query.length<1){
-      //register asset Basilisk
-      await api.tx.assetRegistry.register("UNIT","Token",0);
-      //const result = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-      //register asset Acala
-      const call2 = api2.tx.assetRegistry.registerForeignAsset({V1: {parents:1,interior: "Here"}},{name: "UNIT", symbol: "UNIT", decimals: 12, minimalbalance: 0});
-      await api2.tx.sudo.sudo(call2).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-
-    //const call4 = api3.tx.assetManager.registerForeignAsset({Xcm: {parents: 1,interior: "Here"}},{name: "UNIT",symbol: "UNIT",decimals: 12,isFrozen: "false"},0, "Yes")
-     //const result4 = await (call4).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-
-      this.$notify({ title: 'Loading', text: 'Application is loading and setting up for first time. Please wait, this process takes minute.', duration: 12000,speed: 100})
-      await new Promise(resolve => setTimeout(resolve, 30000));
+      const keyring = new Keyring({ type: 'sr25519' });
       
-      //set asset location Basilisk
-      await api.tx.assetRegistry.setLocation(3,{parents: 1, interior: "Here"});
-      //const result3 = await api.tx.sudo.sudo(call3).signAndSend(bob, (result) => { console.log(result.toHuman()) });
-      await new Promise(resolve => setTimeout(resolve, 30000));
+      //Basilisk node
+      const wsProvider = new WsProvider('ws://127.0.0.1:9989');
+      const api = await ApiPromise.create({ provider: wsProvider });
+
+      //Acala node
+      const wsProvider2 = new WsProvider('ws://127.0.0.1:9988');
+      const api2 = await ApiPromise.create({ provider: wsProvider2 });
+
+      //Moonbeam node
+      //const wsProvider3 = new WsProvider('ws://127.0.0.1:9999');
+      //const api3 = await ApiPromise.create({ provider: wsProvider3 });
+
+      const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
+
+      //API Querys to see, if assets are already registered
+      const quer = await api.query.assetRegistry.assetIds.entries()
+      const query = await api2.query.assetRegistry.assetMetadatas.entries()
+
+      if(quer.length<4 && query.length<1){
+
+        //API call to register asset - Basilisk
+        await api.tx.assetRegistry.register("UNIT","Token",0);
+        //const result = await api.tx.sudo.sudo(call).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+
+        //API call to register asset - Acala
+        const call2 = api2.tx.assetRegistry.registerForeignAsset({
+          V1: {
+            parents:1,
+            interior: "Here"
+          }
+        }, {
+          name: "UNIT", 
+          symbol: "UNIT", 
+          decimals: 12, 
+          minimalbalance: 0
+          }
+        );
+        await api2.tx.sudo.sudo(call2).signAndSend(alice, (result) => { console.log(result.toHuman()) });
+
+        //API call to register asset - Moonbeam
+        //const call4 = api3.tx.assetManager.registerForeignAsset({Xcm: {parents: 1,interior: "Here"}},{name: "UNIT",symbol: "UNIT",decimals: 12,isFrozen: "false"},0, "Yes")
+        //const result4 = await (call4).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+
+        this.$notify({ title: 'Loading', text: 'Application is loading and setting up for first time. Please wait, this process takes minute.', duration: 12000,speed: 100})
+        await new Promise(resolve => setTimeout(resolve, 30000));
+        
+        //Aditional necesary API call set asset location - Basilisk
+        await api.tx.assetRegistry.setLocation(3,{parents: 1, interior: "Here"});
+
+        //const result3 = await api.tx.sudo.sudo(call3).signAndSend(bob, (result) => { console.log(result.toHuman()) });
+        await new Promise(resolve => setTimeout(resolve, 30000));
+      }
+      setTimeout( () => this.$router.push({ path: '/home'}));
     }
-    setTimeout( () => this.$router.push({ path: '/home'}));
-  }
-})
+  })
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 .textt{

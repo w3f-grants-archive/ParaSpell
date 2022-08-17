@@ -13,6 +13,7 @@
     <b-button expanded pack="fas" icon-right="code-compare" class="buttonn"  type="is-primary" @click="openChannels">Open channel</b-button>
   </div>
 </template>
+
 <script lang="ts">
   import { Keyring } from '@polkadot/api'
   import { ApiPromise, WsProvider } from '@polkadot/api'
@@ -20,128 +21,136 @@
 
   export default defineComponent({
   
-  data() {
-    return {
-      items: [] as Array<string>,
-      key: "" as string,
-      keyy: "" as string,
-      };
-    },
+    data() {
+      return {
+        items: [] as Array<string>,
+        key: "" as string,
+        keyy: "" as string,
+        };
+      },
 
-  mounted: async function () {
-    const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-    const api = await ApiPromise.create({ provider: wsProvider });
-    const parachain = await api.query.paras.parachains()
-    const queryPara = JSON.stringify(parachain)
-    const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
-    const results = newParas.filter(element => {return element !== "";});
-    const extractedParas = results.map((i) => Number(i));
-    for (let i=0;extractedParas.length>i; i++)
-    {
-      if (extractedParas[i] == 2090)
-      this.items.push("Basilisk")
-      else if(extractedParas[i]== 2000)
-      this.items.push("Karura")
-      else if(extractedParas[i]== 1000)
-      this.items.push("Moonbeam")
-    }
-  },
+    mounted: async function () {
+      const wsProvider = new WsProvider('ws://127.0.0.1:9944');
+      const api = await ApiPromise.create({ provider: wsProvider });
 
-  methods: {
-    // eslint-disable-next-line
-    async para(value: any){
-      this.key=value.target.value
-    },
-    // eslint-disable-next-line 
-    async paraa(value: any){
-      this.keyy = value.target.value
-    },
-    async openChannels() {
-
-      if(this.key == "" || this.keyy == "" || this.key == this.keyy) 
+      //Call to query parachains connected to Relay chain
+      const parachain = await api.query.paras.parachains()
+      const queryPara = JSON.stringify(parachain)
+      const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
+      const results = newParas.filter(element => {return element !== "";});
+      const extractedParas = results.map((i) => Number(i));
+      for (let i=0;extractedParas.length>i; i++)
       {
-        this.$notify({ title: 'Error', text: 'You need to select different parachains.', type: 'error', duration: 3000,speed: 100})
-
+        if (extractedParas[i] == 2090)
+        this.items.push("Basilisk")
+        else if(extractedParas[i]== 2000)
+        this.items.push("Karura")
+        else if(extractedParas[i]== 1000)
+        this.items.push("Moonbeam")
       }
-      else 
-      {
-        
-        const keyring = new Keyring({ type: 'sr25519' });
-        const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-        const api = await ApiPromise.create({ provider: wsProvider });
-        const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
-        var para1 = 0
-        var para2 = 0
-        //Open HRMP channels
-        if(this.key == "Karura")
-        para1=2000
-        else if(this.key == "Basilisk")
-        para1=2090
-        else if(this.key == "Moonbeam")
-        para1=1000
+    },
 
-        if(this.keyy == "Karura")
-        para2=2000
-        else if(this.keyy == "Basilisk")
-        para2=2090
-        else if(this.keyy == "Moonbeam")
-        para2=1000
+    methods: {
 
-        var counter = 0
-        var counter2 = 0
-        const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
-        await api.tx.sudo.sudo(call).signAndSend(alice, ({status,txHash}) => 
-                  {
-                  if(counter == 0){     
-                    console.log(`Channel1: sudo transaction hash is ${txHash.toHex()}`)
-                    this.$notify({ title: 'Opening channel 1', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
-                    counter+=1
-                    }
-                  if (status.isFinalized) {
-                    console.log(`Channel1: sudo transaction finalized at blockHash ${status.asFinalized}`);
-                    this.$notify({ title: 'Success', text: 'Channel1 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
+      //Used to save selected parachain 1
+      // eslint-disable-next-line
+      async para(value: any){
+        this.key=value.target.value
+      },
 
-                  } });
-        await new Promise(resolve => setTimeout(resolve, 10000));
-        const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para2,para1,8,1000);
-        await api.tx.sudo.sudo(call2).signAndSend(alice, ({status,txHash}) => 
-                  {    
-                  if(counter2 == 0) {
-                    console.log(`Channel2: sudo transaction hash is ${txHash.toHex()}`)
-                    this.$notify({ title: 'Opening channel 2', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
-                    counter2+=1
-                  }
-                  if (status.isFinalized) {
-                    console.log(`Channel2: sudo transaction finalized at blockHash ${status.asFinalized}`);
-                    this.$notify({ title: 'Success', text: 'Channel2 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
+      //Used to save selected parachain 2
+      // eslint-disable-next-line 
+      async paraa(value: any){
+        this.keyy = value.target.value
+      },
 
-                  } });
-        await new Promise(resolve => setTimeout(resolve, 10000));
+      //Used to open HRMP channels
+      async openChannels() {
+        if(this.key == "" || this.keyy == "" || this.key == this.keyy) 
+        {
+          this.$notify({ title: 'Error', text: 'You need to select different parachains.', type: 'error', duration: 3000,speed: 100})
+        }
+        else 
+        {
+          const keyring = new Keyring({ type: 'sr25519' });
+          const wsProvider = new WsProvider('ws://127.0.0.1:9944');
+          const api = await ApiPromise.create({ provider: wsProvider });
+          const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
+          var para1 = 0
+          var para2 = 0
+          var counter = 0
+          var counter2 = 0
+
+          if(this.key == "Karura")
+          para1=2000
+          else if(this.key == "Basilisk")
+          para1=2090
+          else if(this.key == "Moonbeam")
+          para1=1000
+
+          if(this.keyy == "Karura")
+          para2=2000
+          else if(this.keyy == "Basilisk")
+          para2=2090
+          else if(this.keyy == "Moonbeam")
+          para2=1000
+
+          //API call used to open first HRMP channel
+          const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
+          await api.tx.sudo.sudo(call).signAndSend(alice, ({status,txHash}) => 
+          {
+            if(counter == 0){     
+              console.log(`Channel1: sudo transaction hash is ${txHash.toHex()}`)
+              this.$notify({ title: 'Opening channel 1', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
+              counter+=1
+            }
+            if(status.isFinalized) {
+              console.log(`Channel1: sudo transaction finalized at blockHash ${status.asFinalized}`);
+              this.$notify({ title: 'Success', text: 'Channel1 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
+            } 
+          });
+
+          await new Promise(resolve => setTimeout(resolve, 10000));
+
+          //API call used to open second HRMP channel
+          const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para2,para1,8,1000);
+          await api.tx.sudo.sudo(call2).signAndSend(alice, ({status,txHash}) => 
+          {    
+            if(counter2 == 0) {
+              console.log(`Channel2: sudo transaction hash is ${txHash.toHex()}`)
+              this.$notify({ title: 'Opening channel 2', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
+              counter2+=1
+            }
+            if (status.isFinalized) {
+              console.log(`Channel2: sudo transaction finalized at blockHash ${status.asFinalized}`);
+              this.$notify({ title: 'Success', text: 'Channel2 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
+            } 
+          });
+        }
       }
     }
-  }
-})
-
+  })
 </script>
+
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  background-color: white;
-  margin-top: 20px;
-  margin-left: 20%;
-  margin-right: 20%;
-}
+  @import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");
 
-@import url("https://fonts.googleapis.com/css2?family=Anybody:wght@300&family=BIZ+UDGothic&family=Pacifico&display=swap");
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    background-color: white;
+    margin-top: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
 
-.textt{
-  color: black;
-  font-family: "Anybody", cursive;
-  font-size: 30px;
-  margin-bottom: 20px;
-}
+  .textt{
+    color: black;
+    font-family: "Anybody", cursive;
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
 </style>
