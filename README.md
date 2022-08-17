@@ -1,6 +1,7 @@
-## ParaSpell v1.0
-**XCM & XCMP Developer tool**
 
+
+## ParaSpell - XCM & XCMP Developer UI tool
+![Header](https://raw.githubusercontent.com/dudo50/ParaSpell/main/img/HeaderImg.png)
 ## Prerequisites
 ### Git and Make
 #### Linux
