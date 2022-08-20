@@ -55,10 +55,10 @@
         //API call to clean channels associated to specific parachain ID
         const call = api.tx.hrmp.forceCleanHrmp(paraID,0,0);  
         await api.tx.sudo.sudo(call).signAndSend(alice, ({status,txHash}) => 
-        {    
+        { 
           if(counter == 0) {
             console.log(`Sudo transaction hash is ${txHash.toHex()}`)
-            this.$notify({ title: 'Request', text: 'Channels for chosen parachain are currently being closed.', duration: 10000,speed: 100})                    
+            this.$notify({ title: 'Request', text: `Channels for chosen parachain are currently being closed. Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})                    
             counter+=1
           }
           if (status.isFinalized) {
@@ -74,8 +74,7 @@
 
       //Api call to query open Channels
       const channels = await api.query.hrmp.hrmpChannels.entries()
-
-
+      
       //Process of extracting origin and destination nodes figuring in channels
       channels.forEach(([{ args: [era] }]) => {
       this.channelss.push(JSON.stringify(era))    });

@@ -12,7 +12,7 @@
     </b-field>
 
     <b-field class="textt" label-position="inside" label="Select destination parachain">
-      <b-select v-model="keyy" placeholder="Select parachain 2" required>
+      <b-select v-model="keyy" expanded placeholder="Select parachain 2" required>
         <option v-for="(item) in items" :key="item">{{item}}</option>
       </b-select>
     </b-field>
@@ -72,11 +72,11 @@
       for (let i=0;extractedParas.length>i; i++)
       {
         if (extractedParas[i] == 2090)
-        this.items.push("Basilisk")
+          this.items.push("Basilisk")
         else if(extractedParas[i]== 2000)
-        this.items.push("Karura")
+          this.items.push("Karura")
         else if(extractedParas[i]== 1000)
-        this.items.push("Moonbeam")
+          this.items.push("Moonbeam")
       }
 
       //Currencies we can transfer in
@@ -141,52 +141,76 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
 
                   //API call for XCM transfer from Basilisk to destination Parachain
-                  api.tx.xTokens.transfer(3,this.amount,{
-                    V1:{
-                      parents:1,
-                      interior:{
-                        X2:[{
-                          Parachain:para
-                        }, {
-                          AccountId32:{
-                            network:"Any",
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                  api.tx.xTokens
+                    .transfer(
+                      3,
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X2: [
+                              {
+                                Parachain: para
+                              },
+                              {
+                                AccountId32: {
+                                  network: "Any",
+                                  id: api
+                                    .createType("AccountId32", decodeAddress(this.addr))
+                                    .toHex()
+                                }
+                              }
+                            ]
                           }
                         }
-                      ]
-                    }
-                  }
-                },399600000000)
-                .signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+                      },
+                      399600000000
+                    )
+                    .signAndSend(keyring.createFromUri(account), (result) => {
+                      console.log(result);
+                    });
+
 
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
 
                 }
                 else if(this.key == "Karura"){
-                  const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+                  const wsProvider = new WsProvider('ws://127.0.0.1:9947');
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
                   //API call for XCM transfer from Acala to destination Parachain                  
-                  api.tx.xTokens.transfer({
-                    Token: "KSM"
-                  }, 
-                  this.amount, {
-                    V1:{
-                      parents:1,
-                      interior:{
-                        X2: [{
-                          Parachain:para
-                        }, {
-                          AccountId32:{
-                            network: "Any", 
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                  api.tx.xTokens
+                    .transfer(
+                      {
+                        Token: "KSM"
+                      },
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X2: [
+                              {
+                                Parachain: para
+                              },
+                              {
+                                AccountId32: {
+                                  network: "Any",
+                                  id: api
+                                    .createType("AccountId32", decodeAddress(this.addr))
+                                    .toHex()
+                                }
+                              }
+                            ]
                           }
                         }
-                      ]
-                    }
-                  }
-                },399600000000)
-                .signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+                      },
+                      399600000000
+                    )
+                    .signAndSend(keyring.createFromUri(account), (result) => {
+                      console.log(result);
+                    });
 
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }                        
@@ -200,52 +224,76 @@
                 const api = await ApiPromise.create({ provider: wsProvider });
 
                 //API call for XCM transfer from Basilisk to destination Parachain /w injected wallet
-                api.tx.xTokens.transfer(3,this.amount,{
-                  V1:{
-                    parents:1,
-                    interior:{
-                      X2:[{
-                        Parachain:para
-                      },{
-                        AccountId32:{
-                          network:"Any",
-                          id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                api.tx.xTokens
+                  .transfer(
+                    3,
+                    this.amount,
+                    {
+                      V1: {
+                        parents: 1,
+                        interior: {
+                          X2: [
+                            {
+                              Parachain: para
+                            },
+                            {
+                              AccountId32: {
+                                network: "Any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
+                          ]
                         }
                       }
-                    ]
-                  }
-                }
-              },399600000000)
-              .signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                    },
+                    399600000000
+                  )
+                  .signAndSend(address, { signer: injector.signer }, (result) => {
+                    console.log(result);
+                  });
 
                 this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
 
               }
               else if(this.key == "Karura"){
-                const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+                const wsProvider = new WsProvider('ws://127.0.0.1:9947');
                 const api = await ApiPromise.create({ provider: wsProvider });
                   
                 //API call for XCM transfer from Acala to destination Parachain /w injected wallet
-                api.tx.xTokens.transfer({
-                  Token: "KSM"
-                }, 
-                this.amount, {
-                  V1:{
-                    parents:1,
-                    interior:{
-                      X2: [{
-                        Parachain:para
-                        }, {
-                          AccountId32:{
-                            network: "Any", 
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
-                          }
+                api.tx.xTokens
+                  .transfer(
+                    {
+                      Token: "KSM"
+                    },
+                    this.amount,
+                    {
+                      V1: {
+                        parents: 1,
+                        interior: {
+                          X2: [
+                            {
+                              Parachain: para
+                            },
+                            {
+                              AccountId32: {
+                                network: "Any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
+                          ]
                         }
-                      ]
-                    }
-                  }
-                },399600000000)
-                .signAndSend(address, { signer: injector.signer }, (result) => { console.log(result.toHuman) })
+                      }
+                    },
+                    399600000000
+                  )
+                  .signAndSend(address, { signer: injector.signer }, (result) => {
+                    console.log(result.toHuman);
+                  });
+
 
                 this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }  

@@ -42,11 +42,11 @@
       for (let i=0;extractedParas.length>i; i++)
       {
         if (extractedParas[i] == 2090)
-        this.items.push("Basilisk")
+          this.items.push("Basilisk")
         else if(extractedParas[i]== 2000)
-        this.items.push("Karura")
+          this.items.push("Karura")
         else if(extractedParas[i]== 1000)
-        this.items.push("Moonbeam")
+          this.items.push("Moonbeam")
       }
     },
 
@@ -82,18 +82,18 @@
           var counter2 = 0
 
           if(this.key == "Karura")
-          para1=2000
+            para1=2000
           else if(this.key == "Basilisk")
-          para1=2090
+            para1=2090
           else if(this.key == "Moonbeam")
-          para1=1000
+            para1=1000
 
           if(this.keyy == "Karura")
-          para2=2000
+            para2=2000
           else if(this.keyy == "Basilisk")
-          para2=2090
+            para2=2090
           else if(this.keyy == "Moonbeam")
-          para2=1000
+            para2=1000
 
           //API call used to open first HRMP channel
           const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
@@ -101,7 +101,7 @@
           {
             if(counter == 0){     
               console.log(`Channel1: sudo transaction hash is ${txHash.toHex()}`)
-              this.$notify({ title: 'Opening channel 1', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
+              this.$notify({ title: 'Opening channel 1', text:`You will get notified about channel status soon. Transaction hash ${txHash.toHex()}`, duration: 12000,speed: 100})
               counter+=1
             }
             if(status.isFinalized) {
@@ -118,7 +118,7 @@
           {    
             if(counter2 == 0) {
               console.log(`Channel2: sudo transaction hash is ${txHash.toHex()}`)
-              this.$notify({ title: 'Opening channel 2', text:'You will get notified about channel status soon.', duration: 12000,speed: 100})
+              this.$notify({ title: 'Opening channel 2', text:`You will get notified about channel status soon. Transaction hash ${txHash.toHex()}`, duration: 12000,speed: 100})
               counter2+=1
             }
             if (status.isFinalized) {

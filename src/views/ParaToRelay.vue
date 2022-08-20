@@ -65,11 +65,11 @@
       for (let i=0;extractedParas.length>i; i++)
       {
         if (extractedParas[i] == 2090)
-        this.items.push("Basilisk")
+          this.items.push("Basilisk")
         else if(extractedParas[i]== 2000)
-        this.items.push("Karura")
+          this.items.push("Karura")
         else if(extractedParas[i]== 1000)
-        this.items.push("Moonbeam")
+          this.items.push("Moonbeam")
       }
 
       //Currencies we can transfer in
@@ -124,45 +124,65 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
 
                   //API call for XCM transfer from Basilisk to Relay chain
-                  api.tx.xTokens.transfer(0,this.amount,{
-                    V1: {
-                      parents:1, 
-                      interior: { 
-                        X1: { 
-                          AccountId32: { 
-                            network: "any", 
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                  api.tx.xTokens
+                    .transfer(
+                      0,
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
                           }
                         }
-                      }
-                    }
-                  }, 4600000000)
-                  .signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+                      },
+                      4600000000
+                    )
+                    .signAndSend(keyring.createFromUri(account), (result) => {
+                      console.log(result);
+                    });
                   
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }
                 else if(this.key == "Karura"){
-                  const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+                  const wsProvider = new WsProvider('ws://127.0.0.1:9947');
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Acala to Relay chain
-                  api.tx.xTokens.transfer({
-                    Token: "KSM"
-                  },
-                  this.amount, {
-                    V1: {
-                      parents:1, 
-                      interior: { 
-                        X1: { 
-                          AccountId32: { 
-                            network: "any", 
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                  api.tx.xTokens
+                    .transfer(
+                      {
+                        Token: "KSM",
+                      },
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
                           }
                         }
-                      }
-                    }
-                  }, 4600000000)
-                  .signAndSend(keyring.createFromUri(account), (result) => { console.log(result) })
+                      },
+                      4600000000
+                    )
+                    .signAndSend(keyring.createFromUri(account), (result) => {
+                      console.log(result);
+                    });
+
                   
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
 
@@ -172,37 +192,48 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
 
                   //API call for XCM transfer from Moonbeam to Relay chain
-                  api.tx.polkadotXcm.reserveTransferAssets({
-                    V1: { 
-                      parents:1, 
-                      interior:"Here"
-                    }
-                  }, {
-                    V1:{
-                      parents:1,
-                      interior:{
-                        X1:{
-                          AccountId32: {
-                            network: "Any", 
-                            key: this.addr
-                          }
-                        }
-                      }
-                    }
-                  }, {
-                    V1: [{
-                      id: {
-                        Concrete: {
-                          parents:1, 
+                  api.tx.polkadotXcm
+                    .reserveTransferAssets(
+                      {
+                        V1: {
+                          parents: 1,
                           interior: "Here"
                         }
-                      }, 
-                      fun:{ 
-                        Fungible: this.amount
-                      }
-                    }]
-                  },0)
-                  .signAndSend("0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", (result) => { console.log(result) })
+                      },
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "Any",
+                                key: this.addr
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        V1: [
+                          {
+                            id: {
+                              Concrete: {
+                                parents: 1,
+                                interior: "Here"
+                              }
+                            },
+                            fun: {
+                              Fungible: this.amount
+                            }
+                          }
+                        ]
+                      },
+                      0
+                    )
+                    .signAndSend("0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", (result) => {
+                      console.log(result);
+                    });
+
                   
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }  
@@ -216,45 +247,65 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Basilisk to Relay chain /w injected wallet 
-                  api.tx.xTokens.transfer(0,this.amount,{
-                    V1: {
-                      parents:1, 
-                      interior: { 
-                        X1: { 
-                          AccountId32: { 
-                            network: "any", 
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                  api.tx.xTokens
+                    .transfer(
+                      0,
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
                           }
                         }
-                      }
-                    }
-                  }, 4600000000)
-                  .signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                      },
+                      4600000000
+                    )
+                    .signAndSend(address, { signer: injector.signer }, (result) => {
+                      console.log(result);
+                    });
+
                   
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }
                 else if(this.key == "Karura"){
-                  const wsProvider = new WsProvider('ws://127.0.0.1:9988');
+                  const wsProvider = new WsProvider('ws://127.0.0.1:9947');
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Acala to Relay chain /w injected wallet 
-                  api.tx.xTokens.transfer({
-                    Token: "KSM"
-                  },
-                  this.amount,{
-                    V1: {
-                      parents:1, 
-                      interior: { 
-                        X1: { 
-                          AccountId32: { 
-                            network: "any", 
-                            id: api.createType('AccountId32', decodeAddress(this.addr)).toHex()
+                  api.tx.xTokens
+                    .transfer(
+                      {
+                        Token: "KSM"
+                      },
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
                           }
                         }
-                      }
-                    }
-                  }, 4600000000)
-                  .signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                      },
+                      4600000000
+                    )
+                    .signAndSend(address, { signer: injector.signer }, (result) => {
+                      console.log(result);
+                    });
                   
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }                      
@@ -263,37 +314,48 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Moonbeam to Relay chain /w injected wallet                  
-                  api.tx.polkadotXcm.reserveTransferAssets({
-                    V1: { 
-                      parents:1, 
-                      interior:"Here"
-                    }
-                  }, {
-                    V1:{
-                      parents:1,
-                      interior:{
-                        X1:{
-                          AccountId32: {
-                            network: "Any", 
-                            key: this.addr
-                          }
-                        }
-                      }
-                    }
-                  }, {
-                    V1: [{
-                      id: {
-                        Concrete: {
-                          parents:1, 
+                  api.tx.polkadotXcm
+                    .reserveTransferAssets(
+                      {
+                        V1: {
+                          parents: 1,
                           interior: "Here"
                         }
-                      }, 
-                      fun:{ 
-                        Fungible: this.amount
-                      }
-                    }]
-                  },0)
-                  .signAndSend(address, { signer: injector.signer }, (result) => { console.log(result) })
+                      },
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "Any",
+                                key: this.addr
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        V1: [
+                          {
+                            id: {
+                              Concrete: {
+                                parents: 1,
+                                interior: "Here"
+                              }
+                            },
+                            fun: {
+                              Fungible: this.amount
+                            }
+                          }
+                        ]
+                      },
+                      0
+                    )
+                    .signAndSend(address, { signer: injector.signer }, (result) => {
+                      console.log(result);
+                    });
+
                   
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }  
