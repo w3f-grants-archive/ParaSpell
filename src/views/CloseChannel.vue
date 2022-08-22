@@ -40,16 +40,13 @@
         const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
 
         //Here add your new node
-        if(closingCha[0] == "Karura")
-        {
+        if(closingCha[0] == "Karura"){
           paraID = 2000
         }
-        else if(closingCha[0] == "Basilisk")
-        {
+        else if(closingCha[0] == "Basilisk"){
           paraID = 2090
         }
-        else if(closingCha[0] == "Moonbeam")
-        {
+        else if(closingCha[0] == "Moonbeam"){
           paraID = 1000
         }
 

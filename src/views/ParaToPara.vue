@@ -75,9 +75,9 @@
         //Here add your new node
         if (extractedParas[i] == 2090)
           this.items.push("Basilisk")
-        else if(extractedParas[i]== 2000)
+        else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i]== 1000)
+        else if(extractedParas[i] == 1000)
           this.items.push("Moonbeam")
       }
 
@@ -127,7 +127,7 @@
               const keyring = new Keyring({ type: 'sr25519' });
               var para = 0
 
-
+              //Here add your new node
               if(this.keyy == "Basilisk")
                 para = 2090
               else if (this.keyy == "Karura")

@@ -68,9 +68,9 @@
         //Here add your new node
         if (extractedParas[i] == 2090)
           this.items.push("Basilisk")
-        else if(extractedParas[i]== 2000)
+        else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i]== 1000)
+        else if(extractedParas[i] == 1000)
           this.items.push("Moonbeam")
       }
 
@@ -118,18 +118,19 @@
             }
             else{
               var destPara = 0
-              if(this.key == "Karura")
-              {
-                destPara= 2000
+
+              //Here add your new node
+              if(this.key == "Karura"){
+                destPara = 2000
               } 
-              else if(this.key == "Basilisk")
-              {
-                destPara=2090
+              else if(this.key == "Basilisk"){
+                destPara = 2090
               }
-              else if(this.key == "Moonbeam")
-              {
-                destPara=1000
+              else if(this.key == "Moonbeam"){
+                destPara = 1000
               }
+
+
               if(address == "none")
               {
                 this.$notify({ text: 'You need to login first.',type: 'error', duration: 5000,speed: 100})

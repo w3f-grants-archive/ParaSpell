@@ -64,13 +64,13 @@
       const extractedParas = results.map((i) => Number(i));
       for (let i=0;extractedParas.length>i; i++)
       {
-        
+
         //Here add your new node
         if (extractedParas[i] == 2090)
           this.items.push("Basilisk")
-        else if(extractedParas[i]== 2000)
+        else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i]== 1000)
+        else if(extractedParas[i] == 1000)
           this.items.push("Moonbeam")
       }
 
