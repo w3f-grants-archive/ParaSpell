@@ -81,6 +81,7 @@
           var counter = 0
           var counter2 = 0
 
+          //Here add your new node
           if(this.key == "Karura")
             para1=2000
           else if(this.key == "Basilisk")

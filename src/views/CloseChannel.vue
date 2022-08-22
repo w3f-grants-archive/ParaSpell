@@ -39,6 +39,7 @@
         const api = await ApiPromise.create({ provider: wsProvider });
         const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
 
+        //Here add your new node
         if(closingCha[0] == "Karura")
         {
           paraID = 2000
@@ -89,6 +90,8 @@
         const newArr = res.map((i) => Number(i));
         this.senders.push(newArr[0])
         this.recipients.push(newArr[1])
+
+        //Here add your new node
         if(newArr[0] == 2000)
           this.sendersstr.push("Karura")
         else if(newArr[0] == 2090)
