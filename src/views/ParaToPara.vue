@@ -71,6 +71,8 @@
       const extractedParas = results.map((i) => Number(i));
       for (let i=0;extractedParas.length>i; i++)
       {
+
+        //Here add your new node
         if (extractedParas[i] == 2090)
           this.items.push("Basilisk")
         else if(extractedParas[i]== 2000)
@@ -81,6 +83,7 @@
 
       //Currencies we can transfer in
       this.currencies.push("UNIT")
+      this.currencies.push("KSM")
     },
 
     methods: {
@@ -139,11 +142,18 @@
                 if(this.key == "Basilisk"){
                   const wsProvider = new WsProvider('ws://127.0.0.1:9989');
                   const api = await ApiPromise.create({ provider: wsProvider });
+                  var basiliskToken = 0
+
+                  //Here can be added new Basilisk currency
+                  if(this.currency == "UNIT")
+                    basiliskToken = 3
+                  if(this.currency == "KSM")
+                    basiliskToken = 1
 
                   //API call for XCM transfer from Basilisk to destination Parachain
                   api.tx.xTokens
                     .transfer(
-                      3,
+                      basiliskToken,
                       this.amount,
                       {
                         V1: {
@@ -183,7 +193,7 @@
                   api.tx.xTokens
                     .transfer(
                       {
-                        Token: "KSM"
+                        Token: this.currency
                       },
                       this.amount,
                       {
@@ -222,11 +232,18 @@
                 if(this.key == "Basilisk"){
                 const wsProvider = new WsProvider('ws://127.0.0.1:9989');
                 const api = await ApiPromise.create({ provider: wsProvider });
+                basiliskToken = 0
+
+                //Here can be added new Basilisk currency
+                if(this.currency == "UNIT")
+                  basiliskToken = 3
+                if(this.currency == "KSM")
+                  basiliskToken = 1
 
                 //API call for XCM transfer from Basilisk to destination Parachain /w injected wallet
                 api.tx.xTokens
                   .transfer(
-                    3,
+                    basiliskToken,
                     this.amount,
                     {
                       V1: {
@@ -265,7 +282,7 @@
                 api.tx.xTokens
                   .transfer(
                     {
-                      Token: "KSM"
+                      Token: this.currency
                     },
                     this.amount,
                     {

@@ -64,6 +64,8 @@
       const extractedParas = results.map((i) => Number(i));
       for (let i=0;extractedParas.length>i; i++)
       {
+        
+        //Here add your new node
         if (extractedParas[i] == 2090)
           this.items.push("Basilisk")
         else if(extractedParas[i]== 2000)
@@ -74,6 +76,7 @@
 
       //Currencies we can transfer in
       this.currencies.push("UNIT")
+      this.currencies.push("KSM")
     },
 
     methods: {
@@ -115,18 +118,25 @@
             }
             else{   
               const keyring = new Keyring({ type: 'sr25519' });
-
+              var basiliskToken = 0
               //If we have prefunded account login
               if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      
                 var account = "//"+address         
                 if(this.key == "Basilisk"){
+                  
+                  //Here can be added new Basilisk currency
+                  if(this.currency == "UNIT")
+                    basiliskToken = 3
+                  if(this.currency == "KSM")
+                    basiliskToken = 1
+
                   const wsProvider = new WsProvider('ws://127.0.0.1:9989');
                   const api = await ApiPromise.create({ provider: wsProvider });
 
                   //API call for XCM transfer from Basilisk to Relay chain
                   api.tx.xTokens
                     .transfer(
-                      0,
+                      basiliskToken,
                       this.amount,
                       {
                         V1: {
@@ -159,7 +169,7 @@
                   api.tx.xTokens
                     .transfer(
                       {
-                        Token: "KSM",
+                        Token: this.currency,
                       },
                       this.amount,
                       {
@@ -228,7 +238,7 @@
                           }
                         ]
                       },
-                      0
+                      4600000000
                     )
                     .signAndSend("0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac", (result) => {
                       console.log(result);
@@ -245,11 +255,18 @@
                 if(this.key == "Basilisk"){
                   const wsProvider = new WsProvider('ws://127.0.0.1:9989');
                   const api = await ApiPromise.create({ provider: wsProvider });
-                  
+                  basiliskToken = 0
+
+                  //Here can be added new Basilisk currency
+                  if(this.currency == "UNIT")
+                    basiliskToken = 3
+                  if(this.currency == "KSM")
+                    basiliskToken = 1
+
                   //API call for XCM transfer from Basilisk to Relay chain /w injected wallet 
                   api.tx.xTokens
                     .transfer(
-                      0,
+                      basiliskToken,
                       this.amount,
                       {
                         V1: {
@@ -283,7 +300,7 @@
                   api.tx.xTokens
                     .transfer(
                       {
-                        Token: "KSM"
+                        Token: this.currency
                       },
                       this.amount,
                       {
@@ -350,7 +367,7 @@
                           }
                         ]
                       },
-                      0
+                      4600000000
                     )
                     .signAndSend(address, { signer: injector.signer }, (result) => {
                       console.log(result);
