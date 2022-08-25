@@ -66,16 +66,15 @@
       {
 
         //Here add your new node
-        if (extractedParas[i] == 2090)
-          this.items.push("Basilisk")
+        if (extractedParas[i] == 3000)
+          this.items.push("Bifrost")
         else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i] == 1000)
-          this.items.push("Moonbeam")
+        else if(extractedParas[i] == 2001)
+          this.items.push("Pichiu")
       }
 
       //Currencies we can transfer in
-      this.currencies.push("UNIT")
       this.currencies.push("KSM")
     },
 
@@ -123,11 +122,11 @@
               if(this.key == "Karura"){
                 destPara = 2000
               } 
-              else if(this.key == "Basilisk"){
-                destPara = 2090
+              else if(this.key == "Bifrost"){
+                destPara = 3000
               }
-              else if(this.key == "Moonbeam"){
-                destPara = 1000
+              else if(this.key == "Pichiu"){
+                destPara = 2001
               }
 
 
@@ -145,228 +144,118 @@
                 if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie")
                 {
                   account = "//"+address
-                  if(destPara ==2000 || destPara == 2090){
-
-                    //API call for XCM transfer from Relay chain to Basilisk or Acala
-                    api.tx.xcmPallet
-                      .reserveTransferAssets(
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                Parachain: destPara
+                  
+                  //API call for XCM transfer from Relay chain to Parachains
+                  api.tx.xcmPallet
+                    .reserveTransferAssets(
+                      {
+                        V1: {
+                          parents: 0,
+                          interior: {
+                            X1: {
+                              Parachain: destPara
+                            }
+                          }
+                        }
+                      },
+                      {
+                        V1: {
+                          parents: 0,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "Any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
                               }
                             }
                           }
-                        },
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                AccountId32: {
-                                  network: "Any",
-                                  id: api
-                                    .createType("AccountId32", decodeAddress(this.addr))
-                                    .toHex()
-                                }
+                        }
+                      },
+                      {
+                        V1: [
+                          {
+                            id: {
+                              Concrete: {
+                                parents: 0,
+                                interior: "Here"
                               }
+                            },
+                            fun: {
+                              Fungible: this.amount
                             }
                           }
-                        },
-                        {
-                          V1: [
-                            {
-                              id: {
-                                Concrete: {
-                                  parents: 0,
-                                  interior: "Here"
-                                }
-                              },
-                              fun: {
-                                Fungible: this.amount
-                              }
-                            }
-                          ]
-                        },
-                        0
-                      )
-                      .signAndSend(keyring.createFromUri(account), (result) => {
-                        console.log(result);
-                      });
-
-                    
-                    this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                  }
-                  else if(destPara==1000){
-                    
-                    //API call for XCM transfer from Relay chain to Moonbeam
-                    api.tx.xcmPallet
-                      .reserveTransferAssets(
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                Parachain: destPara
-                              }
-                            }
-                          }
-                        },
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                AccountKey20: {
-                                  network: "Any",
-                                  key: this.addr
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          V1: [
-                            {
-                              id: {
-                                Concrete: {
-                                  parents: 0,
-                                  interior: "Here"
-                                }
-                              },
-                              fun: {
-                                Fungible: this.amount
-                              }
-                            }
-                          ]
-                        },
-                        0
-                      )
-                      .signAndSend(keyring.createFromUri(account), (result) => {
-                        console.log(result);
-                      });
-
-                    this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                  }
+                        ]
+                      },
+                      0
+                    )
+                    .signAndSend(keyring.createFromUri(account), (result) => {
+                      console.log(result);
+                    });
+  
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }
-
+                
                 //If injected wallet is logged in
                 else
                 {
                   const injector = await web3FromAddress(address); // finds an injector for an address
                   console.log(`polakdotSigner ===> injector: `,injector);
 
-                  if(destPara ==2000 || destPara == 2090){
-
-                    //API call for XCM transfer From Relay chain to Basilisk or Acala /w injected wallet
-                    api.tx.xcmPallet
-                      .reserveTransferAssets(
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                Parachain: destPara
-                              }
+                  //API call for XCM transfer From Relay chain to Parachains /w injected wallet
+                  api.tx.xcmPallet
+                    .reserveTransferAssets(
+                      {
+                        V1: {
+                          parents: 0,
+                          interior: {
+                            X1: {
+                              Parachain: destPara
                             }
                           }
-                        },
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                AccountId32: {
-                                  network: "Any",
-                                  id: api
-                                    .createType("AccountId32", decodeAddress(this.addr))
-                                    .toHex()
-                                }
-                              }
-                            }
-                          }
-                        },
-                        {
-                          V1: [
-                            {
-                              id: {
-                                Concrete: {
-                                  parents: 0,
-                                  interior: "Here"
-                                }
-                              },
-                              fun: {
-                                Fungible: this.amount
-                              }
-                            }
-                          ]
-                        },
-                        0
-                      )
-                      .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
-                        console.log(`Transaction hash is ${txHash.toHex()}`);
-                        if (status.isFinalized) {
-                          console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
                         }
-                      });
-
-
-                    this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                  }
-                  else if(destPara==1000){
-                    
-                    //API call for XCM transfer from Relay chain to Moonbeam /w injected wallet
-                    api.tx.xcmPallet
-                      .reserveTransferAssets(
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                Parachain: destPara
+                      },
+                      {
+                        V1: {
+                          parents: 0,
+                          interior: {
+                            X1: {
+                              AccountId32: {
+                                network: "Any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
                               }
                             }
                           }
-                        },
-                        {
-                          V1: {
-                            parents: 0,
-                            interior: {
-                              X1: {
-                                AccountKey20: {
-                                  network: "Any",
-                                  key: this.addr
-                                }
+                        }
+                      },
+                      {
+                        V1: [
+                          {
+                            id: {
+                              Concrete: {
+                                parents: 0,
+                                interior: "Here"
                               }
+                            },
+                            fun: {
+                              Fungible: this.amount
                             }
                           }
-                        },
-                        {
-                          V1: [
-                            {
-                              id: {
-                                Concrete: {
-                                  parents: 0,
-                                  interior: "Here"
-                                }
-                              },
-                              fun: {
-                                Fungible: this.amount
-                              }
-                            }
-                          ]
-                        },
-                        0
-                      )
-                      .signAndSend(address, { signer: injector.signer }, (result) => {
-                        console.log(result);
-                      });
+                        ]
+                      },
+                      0
+                    )
+                    .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
+                      console.log(`Transaction hash is ${txHash.toHex()}`);
+                      if (status.isFinalized) {
+                        console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
+                      }
+                    });
 
-                    
                     this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                  }
                 }
               }
             }

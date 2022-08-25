@@ -43,12 +43,12 @@
       {
         
         //Here add your new node
-        if (extractedParas[i] == 2090)
-          this.items.push("Basilisk")
+        if (extractedParas[i] == 3000)
+          this.items.push("Bifrost")
         else if(extractedParas[i]== 2000)
           this.items.push("Karura")
-        else if(extractedParas[i]== 1000)
-          this.items.push("Moonbeam")
+        else if(extractedParas[i]== 2001)
+          this.items.push("Pichiu")
       }
     },
 
@@ -86,17 +86,17 @@
           //Here add your new node
           if(this.key == "Karura")
             para1=2000
-          else if(this.key == "Basilisk")
-            para1=2090
-          else if(this.key == "Moonbeam")
-            para1=1000
+          else if(this.key == "Pichiu")
+            para1=2001
+          else if(this.key == "Bifrost")
+            para1=3000
 
           if(this.keyy == "Karura")
             para2=2000
-          else if(this.keyy == "Basilisk")
-            para2=2090
-          else if(this.keyy == "Moonbeam")
-            para2=1000
+          else if(this.keyy == "Pichiu")
+            para2=2001
+          else if(this.keyy == "Bifrost")
+            para2=3000
 
           //API call used to open first HRMP channel
           const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);

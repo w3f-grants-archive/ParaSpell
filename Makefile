@@ -2,22 +2,15 @@
 install:
 	rustup default nightly
 	rustup target add wasm32-unknown-unknown
-	git clone https://github.com/paritytech/polkadot.git
-	cd ./polkadot/ && git checkout release-v0.9.27 && cargo build --release
-	git clone https://github.com/galacticcouncil/Basilisk-node.git
-	cd ./Basilisk-node/ && make build
-	git clone https://github.com/AcalaNetwork/Acala.git
-	cd ./Acala/ && make init && make build-karura-internal-release
-	git clone https://github.com/PureStake/moonbeam
-	cd moonbeam && cargo build --release
-	polkadot-launch paraspell-network-config.json
+	parachain-launch generate paraspell-network-config.yml
+	cd ./output && docker-compose up -d --build
 
 .PHONY: initialize
 initialize:
 	cd .. && chmod 777 ./ParaSpell
 	apt install curl npm
 	apt-get update && apt-get upgrade
-	npm install -g polkadot-launch
+	npm install -g @open-web3/parachain-launch
 	apt-get install -y git clang libssl-dev llvm libudev-dev cmake
 	
 
@@ -25,7 +18,7 @@ initialize:
 initializemac:
 	cd .. && chmod 777 ./ParaSpell
 	brew install curl node@16 git openssl make llvm protobuf python@3.9 
-	npm install -g polkadot-launch
+	npm install -g @open-web3/parachain-launch
 
 .PHONY: rustup
 rustup:
@@ -33,5 +26,5 @@ rustup:
 
 .PHONY: launch
 launch:
-	polkadot-launch paraspell-network-config.json
+	cd ./output && docker-compose down -v && docker-compose up -d --build
 	

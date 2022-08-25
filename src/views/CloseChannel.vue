@@ -43,11 +43,11 @@
         if(closingCha[0] == "Karura"){
           paraID = 2000
         }
-        else if(closingCha[0] == "Basilisk"){
-          paraID = 2090
+        else if(closingCha[0] == "Pichiu"){
+          paraID = 2001
         }
-        else if(closingCha[0] == "Moonbeam"){
-          paraID = 1000
+        else if(closingCha[0] == "Bifrost"){
+          paraID = 3000
         }
 
         //API call to clean channels associated to specific parachain ID
@@ -87,21 +87,21 @@
         const newArr = res.map((i) => Number(i));
         this.senders.push(newArr[0])
         this.recipients.push(newArr[1])
-
         //Here add your new node
         if(newArr[0] == 2000)
           this.sendersstr.push("Karura")
-        else if(newArr[0] == 2090)
-          this.sendersstr.push("Basilisk")
-        else if(newArr[0] == 1000)
-          this.sendersstr.push("Moonbeam")
+        else if(newArr[0] == 2001)
+          this.sendersstr.push("Pichiu")
+        else if(newArr[0] == 3000)
+          this.sendersstr.push("Bifrost")
         if(newArr[1] == 2000)
           this.recipientsstr.push("Karura")
-        else if(newArr[1] == 2090)
-          this.recipientsstr.push("Basilisk")
-        else if(newArr[1] == 1000)
-          this.recipientsstr.push("Moonbeam")
+        else if(newArr[1] == 2001)
+          this.recipientsstr.push("Pichiu")
+        else if(newArr[1] == 3000)
+          this.recipientsstr.push("Bifrost")
       }
+
       for(let i=0;leng>i;i++)
       {
         var count = i+1

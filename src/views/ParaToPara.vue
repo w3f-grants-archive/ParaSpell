@@ -73,16 +73,15 @@
       {
 
         //Here add your new node
-        if (extractedParas[i] == 2090)
-          this.items.push("Basilisk")
+        if (extractedParas[i] == 3000)
+          this.items.push("Bifrost")
         else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i] == 1000)
-          this.items.push("Moonbeam")
+        else if(extractedParas[i] == 2001)
+          this.items.push("Pichiu")
       }
 
       //Currencies we can transfer in
-      this.currencies.push("UNIT")
       this.currencies.push("KSM")
     },
 
@@ -128,32 +127,28 @@
               var para = 0
 
               //Here add your new node
-              if(this.keyy == "Basilisk")
-                para = 2090
+              if(this.keyy == "Bifrost")
+                para = 3000
               else if (this.keyy == "Karura")
                 para = 2000
-              else if (this.keyy == "Moonbeam")
-                para = 1000
+              else if(this.keyy == "Pichiu")
+                para = 2001
 
               //If we have prefunded account login
               if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      
                 var account = "//"+address 
 
-                if(this.key == "Basilisk"){
-                  const wsProvider = new WsProvider('ws://127.0.0.1:9989');
+                if(this.key == "Bifrost"){
+
+                 const wsProvider = new WsProvider('ws://127.0.0.1:9995');
                   const api = await ApiPromise.create({ provider: wsProvider });
-                  var basiliskToken = 0
-
-                  //Here can be added new Basilisk currency
-                  if(this.currency == "UNIT")
-                    basiliskToken = 3
-                  if(this.currency == "KSM")
-                    basiliskToken = 1
-
-                  //API call for XCM transfer from Basilisk to destination Parachain
+                    
+                  //API call for XCM transfer from Bifrost to destination Parachain                  
                   api.tx.xTokens
                     .transfer(
-                      basiliskToken,
+                      {
+                        Token: this.currency
+                      },
                       this.amount,
                       {
                         V1: {
@@ -182,11 +177,12 @@
                     });
 
 
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
 
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }
+
                 else if(this.key == "Karura"){
-                  const wsProvider = new WsProvider('ws://127.0.0.1:9947');
+                  const wsProvider = new WsProvider('ws://127.0.0.1:9999');
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
                   //API call for XCM transfer from Acala to destination Parachain                  
@@ -223,27 +219,65 @@
                     });
 
                   this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                }                        
+                }      
+                               
+                else if(this.key == "Pichiu"){
+                  
+                  const wsProvider = new WsProvider('ws://127.0.0.1:9991');
+                  const api = await ApiPromise.create({ provider: wsProvider });
+                    
+                  //API call for XCM transfer from Pichiu to destination Parachain                  
+                  api.tx.ormlXTokens
+                    .transfer(
+                      this.currency,
+                      this.amount,
+                      {
+                        V1: {
+                          parents: 1,
+                          interior: {
+                            X2: [
+                              {
+                                Parachain: para
+                              },
+                              {
+                                AccountId32: {
+                                  network: "Any",
+                                  id: api
+                                    .createType("AccountId32", decodeAddress(this.addr))
+                                    .toHex()
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      399600000000
+                    )
+                    .signAndSend(keyring.createFromUri(account), (result) => {
+                      console.log(result);
+                    });
+
+                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                }                     
               }
 
               //If injected wallet is logged in
               else{
+
                 const injector = await web3FromAddress(address); 
-                if(this.key == "Basilisk"){
-                const wsProvider = new WsProvider('ws://127.0.0.1:9989');
+
+                if(this.key == "Bifrost"){
+
+                const wsProvider = new WsProvider('ws://127.0.0.1:9995');
                 const api = await ApiPromise.create({ provider: wsProvider });
-                basiliskToken = 0
 
-                //Here can be added new Basilisk currency
-                if(this.currency == "UNIT")
-                  basiliskToken = 3
-                if(this.currency == "KSM")
-                  basiliskToken = 1
 
-                //API call for XCM transfer from Basilisk to destination Parachain /w injected wallet
+                //API call for XCM transfer from Bifrost to destination Parachain /w injected wallet
                 api.tx.xTokens
                   .transfer(
-                    basiliskToken,
+                    {
+                      Token: this.currency
+                    },
                     this.amount,
                     {
                       V1: {
@@ -275,7 +309,8 @@
 
               }
               else if(this.key == "Karura"){
-                const wsProvider = new WsProvider('ws://127.0.0.1:9947');
+
+                const wsProvider = new WsProvider('ws://127.0.0.1:9999');
                 const api = await ApiPromise.create({ provider: wsProvider });
                   
                 //API call for XCM transfer from Acala to destination Parachain /w injected wallet
@@ -314,6 +349,46 @@
 
                 this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }  
+
+              else if(this.key == "Pichiu"){
+
+                const wsProvider = new WsProvider('ws://127.0.0.1:9991');
+                const api = await ApiPromise.create({ provider: wsProvider });
+                  
+                //API call for XCM transfer from Pichiu to destination Parachain /w injected wallet
+                api.tx.ormlXTokens
+                  .transfer(
+                    this.currency,
+                    this.amount,
+                    {
+                      V1: {
+                        parents: 1,
+                        interior: {
+                          X2: [
+                            {
+                              Parachain: para
+                            },
+                            {
+                              AccountId32: {
+                                network: "Any",
+                                id: api
+                                  .createType("AccountId32", decodeAddress(this.addr))
+                                  .toHex()
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    399600000000
+                  )
+                  .signAndSend(address, { signer: injector.signer }, (result) => {
+                    console.log(result.toHuman);
+                  });
+
+
+                this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                } 
               }
             }
           }
