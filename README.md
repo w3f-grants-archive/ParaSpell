@@ -39,7 +39,9 @@ Overall ParaSpell is all about developer experience.
 # 3. Installation
 Complete guide for project installation and launch.
 ## 3.1 Prerequisites
-Prerequisites required for cloning repository and work with Makefile.
+Prerequisites required for cloning repository, work with Makefile and Network.
+- DOCKER, you can install it from this link [Docker](https://docs.docker.com/get-docker/)
+
 #### Linux
 ```
 sudo apt install git make
@@ -49,7 +51,6 @@ sudo apt install git make
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install make git
 ```
-
 ## 3.2 Dependencies:
 Depedencies necessary for network compilation & startup
 #### Linux
