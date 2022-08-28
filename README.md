@@ -79,7 +79,11 @@ make launch
 ```
 
 ## 3.4 Application install & launch
-
+### Start application in docker container
+```
+make dockerLaunch
+```
+### Start application manually
 #### Install dependencies & packages
 ```
 npm install

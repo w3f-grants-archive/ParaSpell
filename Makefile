@@ -27,4 +27,8 @@ rustup:
 .PHONY: launch
 launch:
 	cd ./output && docker-compose down -v && docker-compose up -d --build
-	
+
+.Phone: dockerLaunch
+dockerLaunch:
+	docker build -t paraspell . && docker run -it -p 8080:8080 --rm --name paraspell1 paraspell
+
