@@ -87,6 +87,7 @@
         const newArr = res.map((i) => Number(i));
         this.senders.push(newArr[0])
         this.recipients.push(newArr[1])
+
         //Here add your new node
         if(newArr[0] == 2000)
           this.sendersstr.push("Karura")

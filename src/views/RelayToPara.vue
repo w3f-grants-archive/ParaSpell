@@ -139,6 +139,7 @@
                 const wsProvider = new WsProvider('ws://127.0.0.1:9944');
                 const api = await ApiPromise.create({ provider: wsProvider });
                 var account = ""
+                var counter = 0
 
                 //If we have prefunded account login
                 if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie")
@@ -146,7 +147,7 @@
                   account = "//"+address
                   
                   //API call for XCM transfer from Relay chain to Parachains
-                  api.tx.xcmPallet
+                  const transfer = api.tx.xcmPallet
                     .reserveTransferAssets(
                       {
                         V1: {
@@ -190,12 +191,16 @@
                       },
                       0
                     )
-                    .signAndSend(keyring.createFromUri(account), (result) => {
-                      console.log(result);
+                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`, type: 'success',duration: 10000,speed: 100})
+                      }
                     });
-  
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-                }
+                  }
                 
                 //If injected wallet is logged in
                 else
@@ -204,7 +209,7 @@
                   console.log(`polakdotSigner ===> injector: `,injector);
 
                   //API call for XCM transfer From Relay chain to Parachains /w injected wallet
-                  api.tx.xcmPallet
+                  const info =api.tx.xcmPallet
                     .reserveTransferAssets(
                       {
                         V1: {
@@ -249,13 +254,14 @@
                       0
                     )
                     .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
-                      console.log(`Transaction hash is ${txHash.toHex()}`);
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
                       if (status.isFinalized) {
-                        console.log(`Transaction finalized at blockHash ${status.asFinalized}`);
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
                       }
                     });
-
-                    this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }
               }
             }

@@ -117,7 +117,7 @@
             }
             else{   
               const keyring = new Keyring({ type: 'sr25519' });
-
+              var counter = 0
               //If we have prefunded account login
               if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      
                 var account = "//"+address     
@@ -151,11 +151,15 @@
                       },
                       4600000000
                     )
-                    .signAndSend(keyring.createFromUri(account), (result) => {
-                      console.log(result);
-                    });
-                  
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                      }
+                    });                
                 }
 
                 else if(this.key == "Karura"){
@@ -187,12 +191,15 @@
                       },
                       4600000000
                     )
-                    .signAndSend(keyring.createFromUri(account), (result) => {
-                      console.log(result);
+                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                      }
                     });
-
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
-
                 }          
                 
                 else if(this.key == "Pichiu"){
@@ -222,11 +229,15 @@
                       },
                       4600000000
                     )
-                    .signAndSend(keyring.createFromUri(account), (result) => {
-                      console.log(result);
-                    });
-                  
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                      }
+                    });                  
                 }            
               }
 
@@ -263,12 +274,15 @@
                       },
                       4600000000
                     )
-                    .signAndSend(address, { signer: injector.signer }, (result) => {
-                      console.log(result);
-                    });
-
-                  
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                    .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                      }
+                    });                  
                 }
                 else if(this.key == "Karura"){
 
@@ -299,11 +313,15 @@
                       },
                       4600000000
                     )
-                    .signAndSend(address, { signer: injector.signer }, (result) => {
-                      console.log(result);
+                    .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                      }
                     });
-                  
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
                 }            
 
                 else if(this.key == "Pichiu"){
@@ -333,11 +351,15 @@
                       },
                       4600000000
                     )
-                    .signAndSend(address, { signer: injector.signer }, (result) => {
-                      console.log(result);
-                    });
-                  
-                  this.$notify({ text: 'Your transfer is now processsing, refresh this page in few seconds to see changes.', duration: 10000,speed: 100})
+                    .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
+                      if(counter == 0){    
+                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                        counter++
+                      }
+                      if (status.isFinalized) {
+                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                      }
+                    });                  
                 }                     
               }
             }
