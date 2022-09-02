@@ -147,7 +147,7 @@
                   account = "//"+address
                   
                   //API call for XCM transfer from Relay chain to Parachains
-                  const transfer = api.tx.xcmPallet
+                  api.tx.xcmPallet
                     .reserveTransferAssets(
                       {
                         V1: {
@@ -209,7 +209,7 @@
                   console.log(`polakdotSigner ===> injector: `,injector);
 
                   //API call for XCM transfer From Relay chain to Parachains /w injected wallet
-                  const info =api.tx.xcmPallet
+                  api.tx.xcmPallet
                     .reserveTransferAssets(
                       {
                         V1: {

@@ -10,6 +10,7 @@ initialize:
 	cd .. && chmod 777 ./ParaSpell
 	apt install curl npm
 	apt-get update && apt-get upgrade
+	n stable
 	npm install -g @open-web3/parachain-launch
 	apt-get install -y git clang libssl-dev llvm libudev-dev cmake
 	
