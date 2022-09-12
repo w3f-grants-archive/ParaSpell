@@ -39,10 +39,10 @@
 <script lang="ts">
   import { Keyring } from '@polkadot/api'
   import { ApiPromise, WsProvider } from '@polkadot/api'
-  import { defineComponent } from '@vue/composition-api'
-  import { decodeAddress } from '@polkadot/util-crypto'
+  import { defineComponent } from '@vue/composition-api' 
   import { web3FromAddress } from "@polkadot/extension-dapp"
   import '@polkadot/api-augment';
+  import  * as xTokens from "@paraspell/sdk"
 
   export default defineComponent({
   
@@ -143,44 +143,17 @@
                  const wsProvider = new WsProvider('ws://127.0.0.1:9995');
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
-                  //API call for XCM transfer from Bifrost to destination Parachain                  
-                  api.tx.xTokens
-                    .transfer(
-                      {
-                        Token: this.currency
-                      },
-                      this.amount,
-                      {
-                        V1: {
-                          parents: 1,
-                          interior: {
-                            X2: [
-                              {
-                                Parachain: para
-                              },
-                              {
-                                AccountId32: {
-                                  network: "Any",
-                                  id: api
-                                    .createType("AccountId32", decodeAddress(this.addr))
-                                    .toHex()
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      399600000000
-                    )
-                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
-                      if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
-                      }
-                    });
+                  //API call for XCM transfer from Bifrost to destination Parachain            
+                  let promise = xTokens.xTokens.transferParaToPara(api,"Bifrost",para,this.currency,this.amount,this.addr)
+                  promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                    if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                    }
+                  });
                 }
 
                 else if(this.key == "Karura"){
@@ -188,43 +161,16 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
                   //API call for XCM transfer from Acala to destination Parachain                  
-                  api.tx.xTokens
-                    .transfer(
-                      {
-                        Token: this.currency
-                      },
-                      this.amount,
-                      {
-                        V1: {
-                          parents: 1,
-                          interior: {
-                            X2: [
-                              {
-                                Parachain: para
-                              },
-                              {
-                                AccountId32: {
-                                  network: "Any",
-                                  id: api
-                                    .createType("AccountId32", decodeAddress(this.addr))
-                                    .toHex()
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      399600000000
-                    )
-                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
-                      if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
-                      }
-                    });
+                  let promise = xTokens.xTokens.transferParaToPara(api,"Karura",para,this.currency,this.amount,this.addr)
+                  promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                    if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                    }
+                  });
                 }      
                                
                 else if(this.key == "Pichiu"){
@@ -233,41 +179,16 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
                   //API call for XCM transfer from Pichiu to destination Parachain                  
-                  api.tx.ormlXTokens
-                    .transfer(
-                      this.currency,
-                      this.amount,
-                      {
-                        V1: {
-                          parents: 1,
-                          interior: {
-                            X2: [
-                              {
-                                Parachain: para
-                              },
-                              {
-                                AccountId32: {
-                                  network: "Any",
-                                  id: api
-                                    .createType("AccountId32", decodeAddress(this.addr))
-                                    .toHex()
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      399600000000
-                    )
-                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
-                      if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
-                      }
-                    });
+                  let promise = xTokens.xTokens.transferParaToPara(api,"Pichiu",para,this.currency,this.amount,this.addr)
+                  promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                    if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                    }
+                  });
                 }                     
               }
 
@@ -283,43 +204,16 @@
 
 
                 //API call for XCM transfer from Bifrost to destination Parachain /w injected wallet
-                api.tx.xTokens
-                  .transfer(
-                    {
-                      Token: this.currency
-                    },
-                    this.amount,
-                    {
-                      V1: {
-                        parents: 1,
-                        interior: {
-                          X2: [
-                            {
-                              Parachain: para
-                            },
-                            {
-                              AccountId32: {
-                                network: "Any",
-                                id: api
-                                  .createType("AccountId32", decodeAddress(this.addr))
-                                  .toHex()
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    399600000000
-                  )
-                  .signAndSend(address, { signer: injector.signer },  ({ status, txHash }) => {
-                    if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success',duration: 10000,speed: 100})
-                      }
-                  });
+                let promise = xTokens.xTokens.transferParaToPara(api,"Bifrost",para,this.currency,this.amount,this.addr)
+                promise.signAndSend(address, { signer: injector.signer },  ({ status, txHash }) => {
+                  if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success',duration: 10000,speed: 100})
+                    }
+                });
               }
               else if(this.key == "Karura"){
 
@@ -327,42 +221,15 @@
                 const api = await ApiPromise.create({ provider: wsProvider });
                   
                 //API call for XCM transfer from Acala to destination Parachain /w injected wallet
-                api.tx.xTokens
-                  .transfer(
-                    {
-                      Token: this.currency
-                    },
-                    this.amount,
-                    {
-                      V1: {
-                        parents: 1,
-                        interior: {
-                          X2: [
-                            {
-                              Parachain: para
-                            },
-                            {
-                              AccountId32: {
-                                network: "Any",
-                                id: api
-                                  .createType("AccountId32", decodeAddress(this.addr))
-                                  .toHex()
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    399600000000
-                  )
-                  .signAndSend(address, { signer: injector.signer },  ({ status, txHash }) => {
-                    if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
-                      }
+                let promise = xTokens.xTokens.transferParaToPara(api,"Karura",para,this.currency,this.amount,this.addr)
+                promise.signAndSend(address, { signer: injector.signer },  ({ status, txHash }) => {
+                  if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                    }
                   });
                 }  
 
@@ -372,40 +239,15 @@
                 const api = await ApiPromise.create({ provider: wsProvider });
                   
                 //API call for XCM transfer from Pichiu to destination Parachain /w injected wallet
-                api.tx.ormlXTokens
-                  .transfer(
-                    this.currency,
-                    this.amount,
-                    {
-                      V1: {
-                        parents: 1,
-                        interior: {
-                          X2: [
-                            {
-                              Parachain: para
-                            },
-                            {
-                              AccountId32: {
-                                network: "Any",
-                                id: api
-                                  .createType("AccountId32", decodeAddress(this.addr))
-                                  .toHex()
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    399600000000
-                  )
-                  .signAndSend(address, { signer: injector.signer },  ({ status, txHash }) => {
-                    if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`, type: 'success',duration: 10000,speed: 100})
-                      }
+                let promise = xTokens.xTokens.transferParaToPara(api,"Pichiu",para,this.currency,this.amount,this.addr)
+                promise.signAndSend(address, { signer: injector.signer },  ({ status, txHash }) => {
+                  if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`, type: 'success',duration: 10000,speed: 100})
+                    }
                   });
                 } 
               }

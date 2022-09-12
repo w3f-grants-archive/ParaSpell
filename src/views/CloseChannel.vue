@@ -10,6 +10,7 @@
   import { Keyring } from '@polkadot/api'
   import { ApiPromise, WsProvider } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
+  import  * as closeChannel from "@paraspell/sdk"
 
   export default defineComponent({
   
@@ -51,8 +52,7 @@
         }
 
         //API call to clean channels associated to specific parachain ID
-        const call = api.tx.hrmp.forceCleanHrmp(paraID,0,0);  
-        await api.tx.sudo.sudo(call).signAndSend(alice, ({status,txHash}) => 
+        closeChannel.closeChannels.closeChannel(api,paraID,0,0).signAndSend(alice, ({status,txHash}) => 
         { 
           if(counter == 0) {
             console.log(`Sudo transaction hash is ${txHash.toHex()}`)

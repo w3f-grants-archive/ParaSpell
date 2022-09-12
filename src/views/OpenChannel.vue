@@ -18,6 +18,7 @@
   import { Keyring } from '@polkadot/api'
   import { ApiPromise, WsProvider } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
+  import  * as openChannel from "@paraspell/sdk"
 
   export default defineComponent({
   
@@ -99,8 +100,7 @@
             para2=3000
 
           //API call used to open first HRMP channel
-          const call = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para1,para2,8,1000);
-          await api.tx.sudo.sudo(call).signAndSend(alice, ({status,txHash}) => 
+          openChannel.openChannels.openChannel(api,para1,para2,8,1000).signAndSend(alice, ({status,txHash}) => 
           {
             if(counter == 0){     
               console.log(`Channel1: sudo transaction hash is ${txHash.toHex()}`)
@@ -116,8 +116,7 @@
           await new Promise(resolve => setTimeout(resolve, 10000));
 
           //API call used to open second HRMP channel
-          const call2 = api.tx.parasSudoWrapper.sudoEstablishHrmpChannel(para2,para1,8,1000);
-          await api.tx.sudo.sudo(call2).signAndSend(alice, ({status,txHash}) => 
+          openChannel.openChannels.openChannel(api,para2,para1,8,1000).signAndSend(alice, ({status,txHash}) => 
           {    
             if(counter2 == 0) {
               console.log(`Channel2: sudo transaction hash is ${txHash.toHex()}`)

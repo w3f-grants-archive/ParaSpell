@@ -35,8 +35,8 @@
   import { ApiPromise, WsProvider } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
-  import { decodeAddress } from '@polkadot/util-crypto'
   import { web3FromAddress } from "@polkadot/extension-dapp"
+  import  * as xTokens from "@paraspell/sdk"
 
   export default defineComponent({
     name: "RelayToPara",
@@ -147,60 +147,17 @@
                   account = "//"+address
                   
                   //API call for XCM transfer from Relay chain to Parachains
-                  api.tx.xcmPallet
-                    .reserveTransferAssets(
-                      {
-                        V1: {
-                          parents: 0,
-                          interior: {
-                            X1: {
-                              Parachain: destPara
-                            }
-                          }
-                        }
-                      },
-                      {
-                        V1: {
-                          parents: 0,
-                          interior: {
-                            X1: {
-                              AccountId32: {
-                                network: "Any",
-                                id: api
-                                  .createType("AccountId32", decodeAddress(this.addr))
-                                  .toHex()
-                              }
-                            }
-                          }
-                        }
-                      },
-                      {
-                        V1: [
-                          {
-                            id: {
-                              Concrete: {
-                                parents: 0,
-                                interior: "Here"
-                              }
-                            },
-                            fun: {
-                              Fungible: this.amount
-                            }
-                          }
-                        ]
-                      },
-                      0
-                    )
-                    .signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
-                      if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`, type: 'success',duration: 10000,speed: 100})
-                      }
-                    });
-                  }
+                  let promise = xTokens.xTokens.transferRelayToPara(api,destPara,this.amount,this.addr)
+                  promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
+                    if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`, type: 'success',duration: 10000,speed: 100})
+                    }
+                  });
+                }
                 
                 //If injected wallet is logged in
                 else
@@ -209,59 +166,16 @@
                   console.log(`polakdotSigner ===> injector: `,injector);
 
                   //API call for XCM transfer From Relay chain to Parachains /w injected wallet
-                  api.tx.xcmPallet
-                    .reserveTransferAssets(
-                      {
-                        V1: {
-                          parents: 0,
-                          interior: {
-                            X1: {
-                              Parachain: destPara
-                            }
-                          }
-                        }
-                      },
-                      {
-                        V1: {
-                          parents: 0,
-                          interior: {
-                            X1: {
-                              AccountId32: {
-                                network: "Any",
-                                id: api
-                                  .createType("AccountId32", decodeAddress(this.addr))
-                                  .toHex()
-                              }
-                            }
-                          }
-                        }
-                      },
-                      {
-                        V1: [
-                          {
-                            id: {
-                              Concrete: {
-                                parents: 0,
-                                interior: "Here"
-                              }
-                            },
-                            fun: {
-                              Fungible: this.amount
-                            }
-                          }
-                        ]
-                      },
-                      0
-                    )
-                    .signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
-                      if(counter == 0){    
-                        this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
-                        counter++
-                      }
-                      if (status.isFinalized) {
-                        this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
-                      }
-                    });
+                  let promise = xTokens.xTokens.transferRelayToPara(api,destPara,this.amount,this.addr)
+                  promise.signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
+                    if(counter == 0){    
+                      this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
+                      counter++
+                    }
+                    if (status.isFinalized) {
+                      this.$notify({ text: `Transaction finalized at blockHash ${status.asFinalized}`,type: 'success', duration: 10000,speed: 100})
+                    }
+                  });
                 }
               }
             }
