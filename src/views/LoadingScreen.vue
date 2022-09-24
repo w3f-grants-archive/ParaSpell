@@ -7,9 +7,7 @@
 
   export default defineComponent({
     mounted: async function () {
-    
     //You can add anything here you wish to load before application starts
-    
     setTimeout( () => this.$router.push({ path: '/home'}));
     }
   })

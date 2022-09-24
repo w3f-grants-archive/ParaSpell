@@ -15,8 +15,7 @@
 </template>
 
 <script lang="ts">
-  import { Keyring } from '@polkadot/api'
-  import { ApiPromise, WsProvider } from '@polkadot/api'
+  import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
   import  * as openChannel from "@paraspell/sdk"
 
@@ -27,8 +26,8 @@
         items: [] as Array<string>,
         key: "" as string,
         keyy: "" as string,
-        };
-      },
+      };
+    },
 
     mounted: async function () {
       const wsProvider = new WsProvider('ws://127.0.0.1:9944');
@@ -40,6 +39,7 @@
       const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
       const results = newParas.filter(element => {return element !== "";});
       const extractedParas = results.map((i) => Number(i));
+
       for (let i=0;extractedParas.length>i; i++)
       {
         
@@ -79,6 +79,7 @@
           const wsProvider = new WsProvider('ws://127.0.0.1:9944');
           const api = await ApiPromise.create({ provider: wsProvider });
           const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
+
           var para1 = 0
           var para2 = 0
           var counter = 0
@@ -103,12 +104,10 @@
           openChannel.openChannels.openChannel(api,para1,para2,8,1000).signAndSend(alice, ({status,txHash}) => 
           {
             if(counter == 0){     
-              console.log(`Channel1: sudo transaction hash is ${txHash.toHex()}`)
               this.$notify({ title: 'Opening channel 1', text:`You will get notified about channel status soon. Transaction hash ${txHash.toHex()}`, duration: 12000,speed: 100})
               counter+=1
             }
             if(status.isFinalized) {
-              console.log(`Channel1: sudo transaction finalized at blockHash ${status.asFinalized}`);
               this.$notify({ title: 'Success', text: 'Channel1 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
             } 
           });
@@ -119,12 +118,10 @@
           openChannel.openChannels.openChannel(api,para2,para1,8,1000).signAndSend(alice, ({status,txHash}) => 
           {    
             if(counter2 == 0) {
-              console.log(`Channel2: sudo transaction hash is ${txHash.toHex()}`)
               this.$notify({ title: 'Opening channel 2', text:`You will get notified about channel status soon. Transaction hash ${txHash.toHex()}`, duration: 12000,speed: 100})
               counter2+=1
             }
             if (status.isFinalized) {
-              console.log(`Channel2: sudo transaction finalized at blockHash ${status.asFinalized}`);
               this.$notify({ title: 'Success', text: 'Channel2 is open, it might take a few seconds to appear in close channel screen.', type: 'success', duration: 10000,speed: 100})
             } 
           });
@@ -148,7 +145,6 @@
     margin-left: 20%;
     margin-right: 20%;
   }
-
   .textt{
     color: black;
     font-family: "Anybody", cursive;

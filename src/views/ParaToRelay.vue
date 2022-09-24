@@ -31,8 +31,7 @@
 </template>
 
 <script lang="ts">
-  import { Keyring } from '@polkadot/api'
-  import { ApiPromise, WsProvider } from '@polkadot/api'
+  import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
   import { web3FromAddress } from "@polkadot/extension-dapp"
   import '@polkadot/api-augment';
@@ -43,14 +42,14 @@
   
     data() {
       return {
-          items: [] as Array<string>,   //Stores Parachains connected to Relay chain
-          key: "" as string,   //Selected origin parachain
-          addr: "" as string,   //Recipient address is stored here
-          amount: 0 as number,   //Required amount to be transfered is stored here
-          currency: "" as string,   //Selected currency is stored here
-          currencies: [] as Array<string>,   //Currently available currencies
-        };
-      },
+        items: [] as Array<string>,   //Stores Parachains connected to Relay chain
+        key: "" as string,   //Selected origin parachain
+        addr: "" as string,   //Recipient address is stored here
+        amount: 0 as number,   //Required amount to be transfered is stored here
+        currency: "" as string,   //Selected currency is stored here
+        currencies: [] as Array<string>,   //Currently available currencies
+      };
+    },
 
     mounted: async function () {
       const wsProvider = new WsProvider('ws://127.0.0.1:9944');
@@ -63,6 +62,7 @@
       const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
       const results = newParas.filter(element => {return element !== "";});
       const extractedParas = results.map((i) => Number(i));
+
       for (let i=0;extractedParas.length>i; i++)
       {
 
@@ -118,7 +118,9 @@
             }
             else{   
               const keyring = new Keyring({ type: 'sr25519' });
+
               var counter = 0
+              
               //If we have prefunded account login
               if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      
                 var account = "//"+address     
@@ -256,14 +258,6 @@
     margin-top: 20px;
     margin-left: 20%;
     margin-right: 20%;
-  }
-  select {
-    width: 150px;
-    margin: 10px;
-  }
-  select:focus {
-    min-width: 150px;
-    width: auto;
   }
   .textt{
     color: black;

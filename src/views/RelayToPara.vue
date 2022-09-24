@@ -31,8 +31,7 @@
 </template>
 
 <script lang="ts">
-  import { Keyring } from '@polkadot/api'
-  import { ApiPromise, WsProvider } from '@polkadot/api'
+  import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import { web3FromAddress } from "@polkadot/extension-dapp"
@@ -199,15 +198,6 @@
     margin-top: 20px;
     margin-left: 20%;
     margin-right: 20%;
-  }
-
-  select {
-    width: 150px;
-    margin: 10px;
-  }
-  select:focus {
-    min-width: 150px;
-    width: auto;
   }
   .textt{
     color: black;

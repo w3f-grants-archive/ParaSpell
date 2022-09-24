@@ -37,8 +37,7 @@
 </template>
 
 <script lang="ts">
-  import { Keyring } from '@polkadot/api'
-  import { ApiPromise, WsProvider } from '@polkadot/api'
+  import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api' 
   import { web3FromAddress } from "@polkadot/extension-dapp"
   import '@polkadot/api-augment';
@@ -69,6 +68,7 @@
       const newParas = queryPara.split('[').join(',').split(']').join(',').split(',')
       const results = newParas.filter(element => {return element !== "";});
       const extractedParas = results.map((i) => Number(i));
+
       for (let i=0;extractedParas.length>i; i++)
       {
 
@@ -124,8 +124,10 @@
             }
             else{
               const keyring = new Keyring({ type: 'sr25519' });
+
               var para = 0
               var counter = 0
+              
               //Here add your new node
               if(this.keyy == "Bifrost")
                 para = 3000
@@ -140,7 +142,7 @@
 
                 if(this.key == "Bifrost"){
 
-                 const wsProvider = new WsProvider('ws://127.0.0.1:9995');
+                  const wsProvider = new WsProvider('ws://127.0.0.1:9995');
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
                   //API call for XCM transfer from Bifrost to destination Parachain            
@@ -201,7 +203,6 @@
 
                 const wsProvider = new WsProvider('ws://127.0.0.1:9995');
                 const api = await ApiPromise.create({ provider: wsProvider });
-
 
                 //API call for XCM transfer from Bifrost to destination Parachain /w injected wallet
                 let promise = xTokens.xTokens.transferParaToPara(api,"Bifrost",para,this.currency,this.amount,this.addr)
@@ -272,15 +273,6 @@
     margin-top: 20px;
     margin-left: 20%;
     margin-right: 20%;
-  }
-
-  select {
-    width: 150px;
-    margin: 10px;
-  }
-  select:focus {
-    min-width: 150px;
-    width: auto;
   }
   .textt{
     color: black;
