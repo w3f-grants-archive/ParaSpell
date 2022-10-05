@@ -46,10 +46,10 @@
           paraID = 2000
         }
         else if(closingCha[0] == "Pichiu"){
-          paraID = 2001
+          paraID = 2102
         }
         else if(closingCha[0] == "Bifrost"){
-          paraID = 3000
+          paraID = 2001
         }
 
         //API call to clean channels associated to specific parachain ID
@@ -92,15 +92,15 @@
         //Here add your new node
         if(newArr[0] == 2000)
           this.sendersstr.push("Karura")
-        else if(newArr[0] == 2001)
+        else if(newArr[0] == 2102)
           this.sendersstr.push("Pichiu")
-        else if(newArr[0] == 3000)
+        else if(newArr[0] == 2001)
           this.sendersstr.push("Bifrost")
         if(newArr[1] == 2000)
           this.recipientsstr.push("Karura")
-        else if(newArr[1] == 2001)
+        else if(newArr[1] == 2102)
           this.recipientsstr.push("Pichiu")
-        else if(newArr[1] == 3000)
+        else if(newArr[1] == 2001)
           this.recipientsstr.push("Bifrost")
       }
 

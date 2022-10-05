@@ -44,11 +44,11 @@
       {
         
         //Here add your new node
-        if (extractedParas[i] == 3000)
+        if (extractedParas[i] == 2001)
           this.items.push("Bifrost")
         else if(extractedParas[i]== 2000)
           this.items.push("Karura")
-        else if(extractedParas[i]== 2001)
+        else if(extractedParas[i]== 2102)
           this.items.push("Pichiu")
       }
     },
@@ -89,16 +89,16 @@
           if(this.key == "Karura")
             para1=2000
           else if(this.key == "Pichiu")
-            para1=2001
+            para1=2102
           else if(this.key == "Bifrost")
-            para1=3000
+            para1=2001
 
           if(this.keyy == "Karura")
             para2=2000
           else if(this.keyy == "Pichiu")
-            para2=2001
+            para2=2102
           else if(this.keyy == "Bifrost")
-            para2=3000
+            para2=2001
 
           //API call used to open first HRMP channel
           openChannel.openChannels.openChannel(api,para1,para2,8,1000).signAndSend(alice, ({status,txHash}) => 
