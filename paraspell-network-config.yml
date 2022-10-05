@@ -16,7 +16,6 @@ relaychain:
     - name: alice
     - name: bob
     - name: charlie
-
 parachains:
 - image: acala/karura-node:2.8.0
   chain:
@@ -49,7 +48,7 @@ parachains:
   chain:
     base: bifrost-local
     sudo: alice
-  id: 3000
+  id: 2001
   parachain: true
   flags:
     - --rpc-methods=unsafe
@@ -72,7 +71,7 @@ parachains:
   chain:
     base: pichiu-local
     sudo: alice
-  id: 2001
+  id: 2102
   parachain: true
   flags:
     - --rpc-methods=unsafe
@@ -93,4 +92,3 @@ parachains:
     - --alice
   - flags:
     - --bob
-
