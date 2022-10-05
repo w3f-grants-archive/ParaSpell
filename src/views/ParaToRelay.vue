@@ -67,11 +67,11 @@
       {
 
         //Here add your new node
-        if (extractedParas[i] == 3000)
+        if (extractedParas[i] == 2001)
           this.items.push("Bifrost")
         else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i] == 2001)
+        else if(extractedParas[i] == 2102)
           this.items.push("Pichiu")
       }
 

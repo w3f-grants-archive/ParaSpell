@@ -73,11 +73,11 @@
       {
 
         //Here add your new node
-        if (extractedParas[i] == 3000)
+        if (extractedParas[i] == 2001)
           this.items.push("Bifrost")
         else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i] == 2001)
+        else if(extractedParas[i] == 2102)
           this.items.push("Pichiu")
       }
 
@@ -130,11 +130,11 @@
               
               //Here add your new node
               if(this.keyy == "Bifrost")
-                para = 3000
+                para = 2001
               else if (this.keyy == "Karura")
                 para = 2000
               else if(this.keyy == "Pichiu")
-                para = 2001
+                para = 2102
 
               //If we have prefunded account login
               if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      

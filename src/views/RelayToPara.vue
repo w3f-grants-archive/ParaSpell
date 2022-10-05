@@ -35,7 +35,7 @@
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import { web3FromAddress } from "@polkadot/extension-dapp"
-  import  * as xTokens from "@paraspell/sdk"
+  import * as xTokens from "@paraspell/sdk"
 
   export default defineComponent({
     name: "RelayToPara",
@@ -65,11 +65,11 @@
       {
 
         //Here add your new node
-        if (extractedParas[i] == 3000)
+        if (extractedParas[i] == 2001)
           this.items.push("Bifrost")
         else if(extractedParas[i] == 2000)
           this.items.push("Karura")
-        else if(extractedParas[i] == 2001)
+        else if(extractedParas[i] == 2102)
           this.items.push("Pichiu")
       }
 
@@ -122,10 +122,10 @@
                 destPara = 2000
               } 
               else if(this.key == "Bifrost"){
-                destPara = 3000
+                destPara = 2001
               }
               else if(this.key == "Pichiu"){
-                destPara = 2001
+                destPara = 2102
               }
 
 
