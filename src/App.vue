@@ -18,7 +18,7 @@
         
         <b-navbar-item style="margin-right: 13%;" class="top"  tag="router-link" to="/paratopara" type="is-link">Transfer</b-navbar-item>  
           
-        <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in with" >
+        <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in with" >Pick option you wish to log in with.
           <b-navbar-item @click="isCardModalActive = true"><b-icon style="margin-right:5px;" size="is-small" pack="fas" icon="wallet" custom-class="fa-bounce"></b-icon>My wallet</b-navbar-item>
           <b-navbar-item @click.native="loginn('Alice')"><b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>Alice</b-navbar-item>
           <b-navbar-item @click.native="loginn('Bob')"><b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>Bob</b-navbar-item>
@@ -36,7 +36,7 @@
         aria-close-label="Close message">Select account you wish to login with and then close this popup by clicking anywhere around these boxes.
       </b-message>
       <b-select placeholder="Select account" expanded style="text-align: center;" @input.native="accountLogin($event)" required>
-        <option v-for="(account, index) in accounts" :key="index">{{account}}</option>
+        <option v-for="(dropdown, index) in dropdown" :key="index">{{dropdown}}</option>
       </b-select>
     </b-modal>
     <router-view/>
@@ -54,7 +54,10 @@
     data() {
       return {
         login: "",   //Currently logged account
-        accounts: [],   //List of collected injected wallets
+        accounts: [],  //List of names - To be also used on Log in button
+        addresses: [], //List of addresses
+        injected: [],  //Collected injected wallets
+        dropdown: [],  //Dropdown of names & addresses
         isCardModalActive: false   //Used to determine whether wallet login popup is or is not active
       };
     },
@@ -68,23 +71,29 @@
       }
 
       //Collect injected wallets
-      this.accounts = await web3Accounts()
+      this.injected = await web3Accounts()
+
+
+      //Used to extract address and name from injected wallet login
+      for (let i=0 ;i<this.injected.length; i++){
+        this.accounts.push(JSON.stringify(this.injected[i]["meta"]["name"]))
+        this.addresses.push(JSON.stringify(this.injected[i]["address"]))
+        this.dropdown.push(this.accounts[i] + this.addresses[i])
+      }
     },
     methods:{
-
-      //Used to extract address from injected wallet login
-      async accountLogin(value){
-        var accSplit = value.target.value.split('{ "address": "')
-        accSplit = accSplit[1].split('{ "address": "')
-        accSplit = accSplit[0].split('"')
-        this.loginn(accSplit[0])
-      },
 
       //Used to save logged account for XCM screens
       async loginn(value){
         this.login=value
         store.commit('saveAccount', this.login)
       },  
+
+      async accountLogin(value){
+        var accSplit = value.target.value.split('"')
+        this.loginn(accSplit[3])
+
+      },
     }
   })
 </script>

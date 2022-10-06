@@ -140,6 +140,7 @@
                 var account = ""
                 var counter = 0
 
+
                 //If we have prefunded account login
                 if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie")
                 {
@@ -162,7 +163,7 @@
                 else
                 {
                   const injector = await web3FromAddress(address); // finds an injector for an address
-                  console.log(`polakdotSigner ===> injector: `,injector);
+                  console.log(`polkadotSigner ===> injector: `,injector);
 
                   //API call for XCM transfer From Relay chain to Parachains /w injected wallet
                   let promise = xTokens.xTokens.transferRelayToPara(api,destPara,this.amount,this.addr)
