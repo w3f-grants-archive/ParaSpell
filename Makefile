@@ -7,18 +7,23 @@ install:
 
 .PHONY: initialize
 initialize:
-	cd .. && chmod 777 ./ParaSpell
-	apt install curl npm
+	cd .. && chmod 777 ./ui
 	apt-get update && apt-get upgrade
+	apt install curl npm
+	npm install -g n
 	n stable
 	npm install -g @open-web3/parachain-launch
 	apt-get install -y git clang libssl-dev llvm libudev-dev cmake
 	
+.PHONY: installDockerEngine
+installDockerEngine:
+	 sudo apt-get update
+	 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 .PHONY: initializemac
 initializemac:
-	cd .. && chmod 777 ./ParaSpell
-	brew install curl node@16 git openssl make llvm protobuf python@3.9 
+	cd .. && chmod 777 ./ui
+	brew install curl node@16 npm docker git openssl make llvm protobuf python@3.9 
 	npm install -g @open-web3/parachain-launch
 
 .PHONY: rustup
@@ -32,4 +37,3 @@ launch:
 .Phone: dockerLaunch
 dockerLaunch:
 	docker build -t paraspell . && docker run -it -p 8080:8080 --rm --name paraspell1 paraspell
-

@@ -1,5 +1,3 @@
-
-
 ## ParaSpell - XCM & XCMP Developer UI tool
 ![Header](https://raw.githubusercontent.com/dudo50/ParaSpell/main/img/HeaderImg.png)
 
@@ -40,13 +38,16 @@ Overall ParaSpell is all about developer experience.
 Complete guide for project installation and launch.
 ## 3.1 Prerequisites
 Prerequisites required for cloning repository, work with Makefile and Network.
-- DOCKER, you can install it from this link [Docker](https://docs.docker.com/get-docker/)
 
 #### Linux
+- DOCKER ENGINE, you can install it from this link [Docker](https://docs.docker.com/engine/install/ubuntu/)
+
 ```
 sudo apt install git make
 ```
 #### MacOs
+- DOCKER, you can install it from this link [Docker](https://docs.docker.com/get-docker/)
+
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install make git
