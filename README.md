@@ -128,5 +128,5 @@ If you are looking for more indepth explanation of XCM, HRMP, Query calls ParaSp
 Project achievements in chronological order ⌛️.
 
 - 📙 Article about project created & presented on international conference ICECET2022 held in Prague (450 out of 1000+ articles accepted) Link to IEEE publication - [IEEE - Sharing Fungible Assets Across Polkadot Paraverse](https://ieeexplore.ieee.org/document/9872938/)
-- 🥈 2nd Prize, Build a XCM related Tool for Moonbeam - Polkadot North America Hackaton [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
-- 🥉 3rd Prize, EVM+ DApp for aUSD yield - Polkadot North America Hackaton [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
+- 🥈 2nd Prize, Build a XCM related Tool for Moonbeam - Polkadot North America Hackathon [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
+- 🥉 3rd Prize, EVM+ DApp for aUSD yield - Polkadot North America Hackathon [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
