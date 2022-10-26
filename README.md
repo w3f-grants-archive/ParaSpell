@@ -1,5 +1,7 @@
 ## ParaSpell - XCM & XCMP Developer UI tool
-![Header](https://raw.githubusercontent.com/dudo50/ParaSpell/main/img/HeaderImg.png)
+![Full name (3)](https://user-images.githubusercontent.com/55763425/197985791-fc7afa52-061d-413a-bbe9-bf1123f16a50.png)
+
+
 
 [1. Introduction](#1-introduction)<br />
 [2. Overview](#2-overview)<br />
@@ -130,3 +132,4 @@ Project achievements in chronological order ⌛️.
 - 📙 Article about project created & presented on international conference ICECET2022 held in Prague (450 out of 1000+ articles accepted) Link to IEEE publication - [IEEE - Sharing Fungible Assets Across Polkadot Paraverse](https://ieeexplore.ieee.org/document/9872938/)
 - 🥈 2nd Prize, Build a XCM related Tool for Moonbeam - Polkadot North America Hackathon [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
 - 🥉 3rd Prize, EVM+ DApp for aUSD yield - Polkadot North America Hackathon [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
+- 🎈 Web 3 Foundation base grant funding accepted [link](https://github.com/dudo50/Grants-Program/blob/d182e10ecbd7705aee07edc5f7aa0085d07188e5/applications/ParaSpell.md) and milestone delivery approved [link](https://github.com/w3f/Grant-Milestone-Delivery/pull/584) .
