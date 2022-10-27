@@ -2,16 +2,15 @@
   <div id="app">
     <b-navbar style="margin-bottom: 5%;">
       <template #start>
-        <img class="mainLogo rotate" src="./assets/polkachange.svg" />
-        <h1 style="margin-right: 2%;" class="name first" >ParaSpell</h1>
-        <b-navbar-item class="top" tag="router-link" to="/home" type="is-link">Home</b-navbar-item>
+        <img style="width: 300x; height: 90px; margin-right: 5%; " src="./assets/paraspellLogo.png" />
+        <b-navbar-item style="margin-right: 5%;" class="top" tag="router-link" to="/home" type="is-link">Home</b-navbar-item>
 
-        <b-navbar-dropdown class="top" label="Channels" >
+        <b-navbar-dropdown style="margin-right: 5%;" class="top" label="Channels" >
           <b-navbar-item tag="router-link" to="/openchannel" type="is-link">Open channels</b-navbar-item>
           <b-navbar-item tag="router-link" to="/closechannel" type="is-link">Close channels</b-navbar-item>
         </b-navbar-dropdown>
           
-        <b-navbar-dropdown class="top" label="Teleport">
+        <b-navbar-dropdown style="margin-right: 5%;" class="top" label="Teleport">
           <b-navbar-item tag="router-link" to="/relaytopara" type="is-link">From relay chain</b-navbar-item>
           <b-navbar-item tag="router-link" to="/paratorelay" type="is-link">To relay chain</b-navbar-item>
         </b-navbar-dropdown>
