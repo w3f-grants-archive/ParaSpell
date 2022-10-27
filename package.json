@@ -33,7 +33,7 @@
     "@polkadot/extension-dapp": "^0.44.3",
     "@polkadot/keyring": "^9.0.1",
     "@polkadot/types": "^8.0.2",
-    "@polkadot/ui-keyring": "^2.0.1",
+    "@polkadot/ui-keyring": "^2.9.9",
     "@vue/composition-api": "^1.4.9",
     "buefy": "^0.9.19",
     "core-js": "^3.8.3",
