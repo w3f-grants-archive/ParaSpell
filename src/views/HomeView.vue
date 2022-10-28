@@ -17,14 +17,14 @@ export default {
             carousels: [
                 {
                     title: 'Slide 1',
-                    image: require("@/assets/main.jpg")
+                    image: require("@/assets/main.png")
                 },                {
                     title: 'Slide 2',
-                    image: require("@/assets/graphimg.jpg")
+                    image: require("@/assets/graphimg.png")
                 },
                 {
                     title: 'Slide 3',
-                    image: require("@/assets/diagram.jpg")
+                    image: require("@/assets/diagram.png")
                 },
             ]
         }
