@@ -110,17 +110,17 @@ make dockerLaunch
 ### Start application manually
 #### Install dependencies & packages
 ```
-npm install
+pnpm install
 ```
 
 #### Starts application for development
 ```
-npm run serve
+pnpm run serve
 ```
 
 #### Compiles and minifies for production
 ```
-npm run build
+pnpm run build
 ```
 
 # 4. Wiki
@@ -130,6 +130,6 @@ If you are looking for more indepth explanation of XCM, HRMP, Query calls ParaSp
 Project achievements in chronological order ⌛️.
 
 - 📙 Article about project created & presented on international conference ICECET2022 held in Prague (450 out of 1000+ articles accepted) Link to IEEE publication - [IEEE - Sharing Fungible Assets Across Polkadot Paraverse](https://ieeexplore.ieee.org/document/9872938/)
-- 🥈 2nd Prize, Build a XCM related Tool for Moonbeam - Polkadot North America Hackathon [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
-- 🥉 3rd Prize, EVM+ DApp for aUSD yield - Polkadot North America Hackathon [Hackaton entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
+- 🥈 2nd Prize, Build a XCM related Tool for Moonbeam - Polkadot North America Hackathon [Hackathon entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
+- 🥉 3rd Prize, EVM+ DApp for aUSD yield - Polkadot North America Hackathon [Hackathon entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
 - 🎈 Web 3 Foundation base grant funding accepted [link](https://github.com/dudo50/Grants-Program/blob/d182e10ecbd7705aee07edc5f7aa0085d07188e5/applications/ParaSpell.md) and milestone delivery approved [link](https://github.com/w3f/Grant-Milestone-Delivery/pull/584) .

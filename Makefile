@@ -13,6 +13,8 @@ initialize:
 	npm install -g n
 	n stable
 	npm install -g @open-web3/parachain-launch
+	corepack enable
+	curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
 	apt-get install -y git clang libssl-dev llvm libudev-dev cmake
 	
 .PHONY: installDockerEngine
@@ -23,7 +25,7 @@ installDockerEngine:
 .PHONY: initializemac
 initializemac:
 	cd .. && chmod 777 ./ui
-	brew install curl node@16 npm docker git openssl make llvm protobuf python@3.9 
+	brew install curl node@16 npm pnpm docker git openssl make llvm protobuf python@3.9 
 	npm install -g @open-web3/parachain-launch
 
 .PHONY: rustup
