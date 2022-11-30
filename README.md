@@ -133,5 +133,6 @@ Project achievements in chronological order ⌛️.
 - 🐍 Basilisk treasury proposal 1/2 Approved [link](https://basilisk.subsquare.io/treasury/proposal/2)
 
 ## Founded by
+[![logo-v1](https://user-images.githubusercontent.com/55763425/204865221-90d2b3cd-f2ac-48a2-a367-08722aa8e923.svg)](https://bsx.fi/)
 
 
