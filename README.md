@@ -2,7 +2,6 @@
 ![Full name (3)](https://user-images.githubusercontent.com/55763425/197985791-fc7afa52-061d-413a-bbe9-bf1123f16a50.png)
 
 
-
 [1. Introduction](#1-introduction)<br />
 [2. Overview](#2-overview)<br />
 [3. Installation](#3-installation)<br />
@@ -131,3 +130,8 @@ Project achievements in chronological order ⌛️.
 - 🥈 2nd Prize, Build a XCM related Tool for Moonbeam - Polkadot North America Hackathon [Hackathon entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
 - 🥉 3rd Prize, EVM+ DApp for aUSD yield - Polkadot North America Hackathon [Hackathon entry](https://devpost.com/software/polkachange-cross-blockchain-transfer-tool)
 - 🎈 Web 3 Foundation base grant funding accepted [link](https://github.com/dudo50/Grants-Program/blob/d182e10ecbd7705aee07edc5f7aa0085d07188e5/applications/ParaSpell.md) and milestone delivery approved [link](https://github.com/w3f/Grant-Milestone-Delivery/pull/584) .
+- 🐍 Basilisk treasury proposal 1/2 Approved [link](https://basilisk.subsquare.io/treasury/proposal/2)
+
+## Founded by
+
+
