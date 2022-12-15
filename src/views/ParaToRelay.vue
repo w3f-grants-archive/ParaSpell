@@ -35,7 +35,7 @@
   import { defineComponent } from '@vue/composition-api'
   import { web3FromAddress } from "@polkadot/extension-dapp"
   import '@polkadot/api-augment';
-  import  * as xTokens from "@paraspell/sdk"
+  import  * as paraspell from "@paraspell/sdk"
 
 
   export default defineComponent({
@@ -131,7 +131,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Bifrost to Relay chain
-                  let promise = xTokens.xTokens.transferParaToRelay(api,"Bifrost",this.currency,this.amount,this.addr)
+                  let promise = paraspell.xcmPallet.send(api,"BifrostKusama",this.currency,0,this.amount,this.addr)
                   promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
@@ -149,7 +149,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Acala to Relay chain
-                  let promise = xTokens.xTokens.transferParaToRelay(api,"Karura",this.currency,this.amount,this.addr)
+                  let promise = paraspell.xcmPallet.send(api,"Karura",this.currency,0,this.amount,this.addr)
                   promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
@@ -167,7 +167,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Pichiu to Relay chain
-                  let promise = xTokens.xTokens.transferParaToRelay(api,"Pichiu",this.currency,this.amount,this.addr)
+                  let promise = paraspell.xcmPallet.send(api,"Pichiu",this.currency,0,this.amount,this.addr)
                   promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
@@ -190,7 +190,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Bifrost to Relay chain /w injected wallet 
-                  let promise = xTokens.xTokens.transferParaToRelay(api,"Bifrost",this.currency,this.amount,this.addr)
+                  let promise = paraspell.xcmPallet.send(api,"BifrostKusama",this.currency,0,this.amount,this.addr)
                   promise.signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
@@ -207,7 +207,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Acala to Relay chain /w injected wallet 
-                  let promise = xTokens.xTokens.transferParaToRelay(api,"Karura",this.currency,this.amount,this.addr)
+                  let promise = paraspell.xcmPallet.send(api,"Karura",this.currency,0,this.amount,this.addr)
                   promise.signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
@@ -225,7 +225,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                   
                   //API call for XCM transfer from Pichiu to Relay chain
-                  let promise = xTokens.xTokens.transferParaToRelay(api,"Pichiu",this.currency,this.amount,this.addr)
+                  let promise = paraspell.xcmPallet.send(api,"Pichiu",this.currency,0,this.amount,this.addr)
                   promise.signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
