@@ -61,7 +61,6 @@
       };
     },
     mounted: async function () {
-
       //Connect injected wallets that are available
       const extensions = await web3Enable("PolkadotJS")
       if(extensions.length == 0) {
