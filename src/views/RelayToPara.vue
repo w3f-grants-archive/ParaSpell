@@ -54,7 +54,7 @@
     mounted: async function () {
       const wsProvider = new WsProvider('ws://127.0.0.1:9944');
       const api = await ApiPromise.create({ provider: wsProvider });
-
+      
       //API call to query Parachains connected to Relay chain
       const parachain = await api.query.paras.parachains()
       const queryPara = JSON.stringify(parachain)
@@ -115,17 +115,17 @@
                 this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
             }
             else{
-              var destPara = 0
+              var destPara:any
 
               //Here add your new node
               if(this.key == "Karura"){
-                destPara = 2000
+                destPara = "Karura"
               } 
               else if(this.key == "Bifrost"){
-                destPara = 2001
+                destPara = "Bifrost"
               }
               else if(this.key == "Pichiu"){
-                destPara = 2102
+                destPara = "Pichiu"
               }
 
 

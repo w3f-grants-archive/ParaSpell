@@ -80,25 +80,25 @@
           const api = await ApiPromise.create({ provider: wsProvider });
           const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
 
-          var para1 = 0
-          var para2 = 0
+          var para1:any
+          var para2:any
           var counter = 0
           var counter2 = 0
 
           //Here add your new node
           if(this.key == "Karura")
-            para1=2000
+            para1= "Karura"
           else if(this.key == "Pichiu")
-            para1=2102
+            para1=  "Pichiu"
           else if(this.key == "Bifrost")
-            para1=2001
+            para1="Bifrost"
 
           if(this.keyy == "Karura")
-            para2=2000
+            para2= "Karura"
           else if(this.keyy == "Pichiu")
-            para2=2102
+            para2= "Pichiu"
           else if(this.keyy == "Bifrost")
-            para2=2001
+            para2= "Bifrost"
 
           //API call used to open first HRMP channel
           openChannel.openChannels.openChannel(api,para1,para2,8,1000).signAndSend(alice, ({status,txHash}) => 

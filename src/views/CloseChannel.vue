@@ -32,7 +32,7 @@
 
         var closingC = channel.split(": ")
         var closingCha = closingC[1].split(" =>")
-        var paraID = 0
+        var paraID:any
         var counter = 0
 
         //Constants used for connecting to RPC node & for specifying account that will create Close channel calls
@@ -43,13 +43,13 @@
 
         //Here add your new node
         if(closingCha[0] == "Karura"){
-          paraID = 2000
+          paraID = "Karura"
         }
         else if(closingCha[0] == "Pichiu"){
-          paraID = 2102
+          paraID = "Pichiu"
         }
         else if(closingCha[0] == "Bifrost"){
-          paraID = 2001
+          paraID = "Bifrost"
         }
 
         //API call to clean channels associated to specific parachain ID

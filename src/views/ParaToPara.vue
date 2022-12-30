@@ -125,16 +125,16 @@
             else{
               const keyring = new Keyring({ type: 'sr25519' });
 
-              var para = 0
+              var para:any
               var counter = 0
               
               //Here add your new node
               if(this.keyy == "Bifrost")
-                para = 2001
+                para = "Bifrost"
               else if (this.keyy == "Karura")
-                para = 2000
+                para = "Karura"
               else if(this.keyy == "Pichiu")
-                para = 2102
+                para = "Pichiu"
 
               //If we have prefunded account login
               if(address == "Alice" || address == "Bob" || address == "Charlie" || address== "Dave" || address == "Eve" || address == "Ferdie"){      
@@ -146,7 +146,7 @@
                   const api = await ApiPromise.create({ provider: wsProvider });
                     
                   //API call for XCM transfer from Bifrost to destination Parachain            
-                  let promise = paraspell.xcmPallet.send(api, "BifrostKusama", this.currency, 0, this.amount, this.addr, para)
+                  let promise = paraspell.xcmPallet.send(api, "BifrostKusama", this.currency, 0, this.amount, this.addr,para)
                   promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
