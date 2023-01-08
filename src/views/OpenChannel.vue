@@ -17,7 +17,7 @@
 <script lang="ts">
   import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
-  import  * as openChannel from "@paraspell/sdk"
+  import { Builder } from '@paraspell/sdk'
 
   export default defineComponent({
   
@@ -91,17 +91,17 @@
           else if(this.key == "Pichiu")
             para1=  "Pichiu"
           else if(this.key == "Bifrost")
-            para1="Bifrost"
+            para1="BifrostKusama"
 
           if(this.keyy == "Karura")
             para2= "Karura"
           else if(this.keyy == "Pichiu")
             para2= "Pichiu"
           else if(this.keyy == "Bifrost")
-            para2= "Bifrost"
+            para2= "BifrostKusama"
 
           //API call used to open first HRMP channel
-          openChannel.openChannels.openChannel(api,para1,para2,8,1000).signAndSend(alice, ({status,txHash}) => 
+           Builder(api).from(para1).to(para2).openChannel().maxSize(8).maxMessageSize(1000).build().signAndSend(alice, ({status,txHash}) => 
           {
             if(counter == 0){     
               this.$notify({ title: 'Opening channel 1', text:`You will get notified about channel status soon. Transaction hash ${txHash.toHex()}`, duration: 12000,speed: 100})
@@ -115,7 +115,7 @@
           await new Promise(resolve => setTimeout(resolve, 10000));
 
           //API call used to open second HRMP channel
-          openChannel.openChannels.openChannel(api,para2,para1,8,1000).signAndSend(alice, ({status,txHash}) => 
+          Builder(api).from(para2).to(para1).openChannel().maxSize(8).maxMessageSize(1000).build().signAndSend(alice, ({status,txHash}) => 
           {    
             if(counter2 == 0) {
               this.$notify({ title: 'Opening channel 2', text:`You will get notified about channel status soon. Transaction hash ${txHash.toHex()}`, duration: 12000,speed: 100})

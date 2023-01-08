@@ -9,7 +9,7 @@
 <script lang="ts">
   import { ApiPromise, WsProvider, Keyring } from '@polkadot/api'
   import { defineComponent } from '@vue/composition-api'
-  import  * as closeChannel from "@paraspell/sdk"
+  import { Builder } from '@paraspell/sdk'
 
   export default defineComponent({
   
@@ -49,11 +49,11 @@
           paraID = "Pichiu"
         }
         else if(closingCha[0] == "Bifrost"){
-          paraID = "Bifrost"
+          paraID = "BifrostKusama"
         }
 
         //API call to clean channels associated to specific parachain ID
-        closeChannel.closeChannels.closeChannel(api,paraID,0,0).signAndSend(alice, ({status,txHash}) => 
+        Builder(api).from(paraID).closeChannel().inbound(0).outbound(0).build().signAndSend(alice, ({status,txHash}) => 
         { 
           if(counter == 0) {
             this.$notify({ title: 'Request', text: `Channels for chosen parachain are currently being closed. Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})                    

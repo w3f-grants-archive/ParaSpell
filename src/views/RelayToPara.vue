@@ -35,7 +35,7 @@
   import { defineComponent } from '@vue/composition-api'
   import '@polkadot/api-augment';
   import { web3FromAddress } from "@polkadot/extension-dapp"
-  import * as paraspell from "@paraspell/sdk"
+  import { Builder } from '@paraspell/sdk'
 
   export default defineComponent({
     name: "RelayToPara",
@@ -122,7 +122,7 @@
                 destPara = "Karura"
               } 
               else if(this.key == "Bifrost"){
-                destPara = "Bifrost"
+                destPara = "BifrostKusama"
               }
               else if(this.key == "Pichiu"){
                 destPara = "Pichiu"
@@ -147,7 +147,7 @@
                   account = "//"+address
                   
                   //API call for XCM transfer from Relay chain to Parachains
-                  let promise = paraspell.xcmPallet.transferRelayToPara(api, destPara, this.amount, this.addr)
+                  let promise = Builder(api).to(destPara).amount(this.amount).address(this.addr).build()
                   promise.signAndSend(keyring.createFromUri(account), ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
@@ -166,7 +166,7 @@
                   console.log(`polkadotSigner ===> injector: `,injector);
 
                   //API call for XCM transfer From Relay chain to Parachains /w injected wallet
-                  let promise = paraspell.xcmPallet.transferRelayToPara(api,destPara ,this.amount ,this.addr)
+                  let promise = Builder(api).to(destPara).amount(this.amount).address(this.addr).build()
                   promise.signAndSend(address, { signer: injector.signer }, ({ status, txHash }) => {
                     if(counter == 0){    
                       this.$notify({ text: `Transaction hash is ${txHash.toHex()}`, duration: 10000,speed: 100})
