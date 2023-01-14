@@ -121,7 +121,7 @@ pnpm run build
 ```
 
 # 4. Wiki
-If you are looking for more indepth explanation of XCM, HRMP, Query calls ParaSpell uses or you want to add new currencies/nodes to ParaSpell/Network check out our Wiki - [ParaSpell✨ Wiki 📚️](https://github.com/dudo50/ParaSpell/wiki)
+If you are looking for more indepth explanation of XCM, HRMP, Query calls ParaSpell uses or you want to add new currencies/nodes to ParaSpell/Network check out our Wiki - [ParaSpell✨ Wiki 📚️](https://paraspell.github.io/docs/)
 
 # 5. Project achievements
 Project achievements in chronological order ⌛️.
