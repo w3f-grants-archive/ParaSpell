@@ -9,6 +9,7 @@
 &nbsp;&nbsp;[3.2 Dependencies](#32-dependencies)<br />
 &nbsp;&nbsp;[3.3 Network install, compilation & start](#33-network-install-compilation--start)<br />
 &nbsp;&nbsp;[3.4 Application install & launch](#34-application-install--launch)<br />
+&nbsp;&nbsp;[3.5 Use XYK Feature](#35-use-xyk-feature)<br />
 [4. Wiki](#4-wiki)<br />
 [5. Project achievements](#5-project-achievements)<br />
 
@@ -118,6 +119,33 @@ pnpm run serve
 #### Compiles and minifies for production
 ```
 pnpm run build
+```
+
+## 3.5 Use XYK Feature
+This feature requires local network with Basilisk node.
+How to start local network can be seen below:
+
+Install polkadot-launch
+```
+npm install -g polkadot-launch
+```
+
+Clone and Build Relay chain repo
+```
+git clone https://github.com/paritytech/polkadot.git
+cd ./polkadot/ && git checkout release-v0.9.24 && cargo build --release
+```
+
+Clone and Build Basilisk repo
+```
+git clone https://github.com/galacticcouncil/Basilisk-node.git
+cd ./Basilisk-node/ && make build
+```
+
+Launch local network with Basilisk
+```
+cd ../rococo-local
+polkadot-launch config.json
 ```
 
 # 4. Wiki
