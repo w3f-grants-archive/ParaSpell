@@ -80,8 +80,12 @@
           const api = await ApiPromise.create({ provider: wsProvider });
           const alice = keyring.addFromUri('//Alice', { name: 'Alice default' });
 
+          // eslint-disable-next-line 
           var para1:any
+          
+          // eslint-disable-next-line 
           var para2:any
+          
           var counter = 0
           var counter2 = 0
 

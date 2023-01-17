@@ -115,6 +115,7 @@
                 this.$notify({ title: 'Error', text: 'Specified amount is less than required {1000000000000}.', type: 'error', duration: 3000,speed: 100})
             }
             else{
+              // eslint-disable-next-line 
               var destPara:any
 
               //Here add your new node

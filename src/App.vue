@@ -13,10 +13,11 @@
         <b-navbar-dropdown style="margin-right: 5%;" class="top" label="Teleport">
           <b-navbar-item tag="router-link" to="/relaytopara" type="is-link">From relay chain</b-navbar-item>
           <b-navbar-item tag="router-link" to="/paratorelay" type="is-link">To relay chain</b-navbar-item>
+          <b-navbar-item  tag="router-link" to="/paratopara" type="is-link">Para to Para</b-navbar-item>  
         </b-navbar-dropdown>
         
-        <b-navbar-item style="margin-right: 13%;" class="top"  tag="router-link" to="/paratopara" type="is-link">Transfer</b-navbar-item>  
-          
+          <b-navbar-item style="margin-right: 13%;" class="top"  tag="router-link" to="/xyk" type="is-link">XYK</b-navbar-item>  
+
         <b-navbar-dropdown hoverable arrowless boxed class="top" style= "border-style: solid; color: #7a56d5; border-radius: 5px;" label="Log in with" >Pick option you wish to log in with.
           <b-navbar-item @click="isCardModalActive = true"><b-icon style="margin-right:5px;" size="is-small" pack="fas" icon="wallet" custom-class="fa-bounce"></b-icon>My wallet</b-navbar-item>
           <b-navbar-item @click.native="loginn('Alice')"><b-icon style="margin-right:5px" size="is-small" pack="fas" icon="clipboard-user"></b-icon>Alice</b-navbar-item>

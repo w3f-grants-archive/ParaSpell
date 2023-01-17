@@ -32,6 +32,8 @@
 
         var closingC = channel.split(": ")
         var closingCha = closingC[1].split(" =>")
+        
+        // eslint-disable-next-line 
         var paraID:any
         var counter = 0
 

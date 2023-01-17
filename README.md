@@ -133,7 +133,7 @@ npm install -g polkadot-launch
 Clone and Build Relay chain repo
 ```
 git clone https://github.com/paritytech/polkadot.git
-cd ./polkadot/ && git checkout release-v0.9.24 && cargo build --release
+cd ./polkadot/ && git checkout release-v0.9.36 && cargo build --release
 ```
 
 Clone and Build Basilisk repo

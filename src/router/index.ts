@@ -22,6 +22,14 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/ParaToRelay.vue')
   },
   {
+    path: '/xyk',
+    name: 'xyk',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/XYK.vue')
+  },
+  {
     path: '/relaytopara',
     name: 'relaytopara',
     // route level code-splitting
