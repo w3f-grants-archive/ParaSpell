@@ -1,4 +1,4 @@
-## ParaSpell - XCM & XCMP Developer UI tool
+## ParaSpell - UI-V1
 ![Full name (3)](https://user-images.githubusercontent.com/55763425/197985791-fc7afa52-061d-413a-bbe9-bf1123f16a50.png)
 
 
