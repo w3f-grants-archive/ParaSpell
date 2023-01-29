@@ -144,7 +144,7 @@ cd ./Basilisk-node/ && make build
 
 Launch local network with Basilisk
 ```
-cd ../rococo-local
+cd ./rococo-local
 polkadot-launch config.json
 ```
 
